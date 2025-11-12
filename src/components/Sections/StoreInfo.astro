@@ -1,0 +1,157 @@
+---
+export interface Props {
+  storeInfo?: {
+    store_name: string;
+    street: string;
+    postal_code: string;
+    city: string;
+    phone: string;
+    phone_secondary?: string;
+    fax?: string;
+    email: string;
+    website?: string;
+    location_description?: string;
+    opening_hours: Array<{
+      days: string;
+      hours: string;
+    }>;
+  } | null;
+}
+
+const { storeInfo } = Astro.props;
+
+// Fallback data if Directus is not available
+const defaultInfo = {
+  store_name: "Weltladen Xanten",
+  street: "Kurfürstenstr. 5",
+  postal_code: "46509",
+  city: "Xanten",
+  phone: "(0 28 01) 70 57 81",
+  phone_secondary: "(0 28 01) 70 57 76 (AB)",
+  fax: "(0 28 01) 70 57 79",
+  email: "info@weltladenxanten.de",
+  website: "www.ewgx.de",
+  location_description: "Sie finden uns mitten in der Fußgängerzone in Xanten",
+  opening_hours: [
+    { days: "Montag - Freitag", hours: "10.00 bis 13.00 und 15.00 bis 18.30 Uhr" },
+    { days: "Samstag", hours: "10.00 bis 16.00 Uhr" }
+  ]
+};
+
+const info = storeInfo || defaultInfo;
+---
+
+<section class="py-16 bg-gradient-to-br from-primary-50 to-white">
+  <div class="container">
+    {info.location_description && (
+      <div class="text-center mb-12">
+        <p class="text-xl text-gray-700 font-medium">{info.location_description}</p>
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      <!-- Address & Contact Card -->
+      <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center mb-6">
+          <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900">Kontakt & Anschrift</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-xl font-bold text-primary-600 mb-2">{info.store_name}</h3>
+            <address class="not-italic text-gray-700 leading-relaxed">
+              {info.street}<br />
+              {info.postal_code} {info.city}
+            </address>
+          </div>
+
+          <div class="pt-4 border-t border-gray-200">
+            <div class="space-y-2">
+              <a href={`tel:${info.phone.replace(/\s/g, '')}`} class="flex items-center text-gray-700 hover:text-primary-600 transition-colors group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-primary-500 group-hover:text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span>Tel.: {info.phone}</span>
+              </a>
+
+              {info.phone_secondary && (
+                <a href={`tel:${info.phone_secondary.replace(/\s/g, '').replace('(AB)', '')}`} class="flex items-center text-gray-700 hover:text-primary-600 transition-colors group">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-primary-500 group-hover:text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <span>Tel.: {info.phone_secondary}</span>
+                </a>
+              )}
+
+              {info.fax && (
+                <div class="flex items-center text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                  </svg>
+                  <span>Fax: {info.fax}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-gray-200">
+            <a href={`mailto:${info.email}`} class="flex items-center text-gray-700 hover:text-primary-600 transition-colors group mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-primary-500 group-hover:text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <span class="break-all">{info.email}</span>
+            </a>
+
+            {info.website && (
+              <a href={`https://${info.website}`} target="_blank" rel="noopener noreferrer" class="flex items-center text-gray-700 hover:text-primary-600 transition-colors group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-primary-500 group-hover:text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                </svg>
+                <span>{info.website}</span>
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+            <!-- Opening Hours Card -->
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="p-2 bg-primary-100 rounded-lg">
+            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900">Öffnungszeiten</h3>
+        </div>
+        
+        <div class="space-y-4 text-center">
+          {(storeInfo?.opening_hours || defaultInfo.opening_hours).map((schedule: { days: string; hours: string }) => (
+            <div class="py-3">
+              <div class="font-semibold text-gray-800 text-lg mb-1">{schedule.days}</div>
+              <div class="text-gray-900 text-2xl font-medium">{schedule.hours}</div>
+            </div>
+          ))}
+                  <div class="mt-8 pt-6 border-t border-gray-200">
+          <a 
+            href="https://www.google.com/maps/search/?api=1&query=Weltladen+Xanten+Kurfürstenstr.+5+46509+Xanten" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center w-full px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
+            Auf Karte ansehen
+          </a>
+        </div>
+        </div>
+    </div>
+  </div>
+</section>

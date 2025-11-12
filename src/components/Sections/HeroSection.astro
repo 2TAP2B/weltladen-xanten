@@ -1,46 +1,235 @@
 ---
 import Button from "../UI/Button.astro";
+import { getAssetUrl } from "../../utils/directus";
 
 export interface Props {
-  title?: string;
-  subtitle?: string;
-  backgroundImage?: string;
-  ctaText?: string;
-  ctaLink?: string;
-  secondaryCtaText?: string;
-  secondaryCtaLink?: string;
+  slides: Array<{
+    id: string;
+    title: string;
+    subtitle?: string;
+    image: string;
+    button_text?: string;
+    button_link?: string;
+  }>;
 }
 
-const {
-  title = "Welcome to Our Church",
-  subtitle = "A place of worship, community, and spiritual growth",
-  backgroundImage = "/uploads/hero-bg.jpg",
-  ctaText = "Plan Your Visit",
-  ctaLink = "/im-new",
-  secondaryCtaText = "Watch Sermons",
-  secondaryCtaLink = "/sermons",
-} = Astro.props;
+const { slides = [] } = Astro.props;
+
+// Fallback to static content if no slides from Directus
+const defaultSlides = [
+  {
+    id: "default",
+    title: "Welcome to Our Church",
+    subtitle: "A place of worship, community, and spiritual growth",
+    image: "/uploads/hero-bg.jpg",
+    button_text: "Plan Your Visit",
+    button_link: "/im-new"
+  }
+];
+
+const displaySlides = slides.length > 0 ? slides : defaultSlides;
 ---
 
-<section
-  class="relative min-h-[70vh] flex items-center bg-cover pt-30"
-  style={`background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${backgroundImage}); background-position: center 20%;`}
->
-
-  <div class="container">
-    <div class="max-w-3xl text-white">
-      <h1 class="text-4xl md:text-6xl font-bold mb-4 text-white">{title}</h1>
-      <p class="text-xl md:text-2xl mb-8">{subtitle}</p>
-      
-      <div class="flex flex-wrap gap-4">
-        <Button href={ctaLink} variant="primary" size="lg">
-          {ctaText}
-        </Button>
-        
-        <Button href={secondaryCtaLink} variant="outline" size="lg" class="bg-white/10 text-white border-white hover:bg-white hover:text-gray-900 backdrop-blur-sm">
-          {secondaryCtaText}
-        </Button>
+<section class="relative min-h-[70vh] overflow-hidden">
+  <!-- Slideshow Container -->
+  <div class="hero-slideshow relative w-full h-full min-h-[70vh]">
+    {displaySlides.map((slide, index) => (
+      <div 
+        class={`hero-slide absolute inset-0 w-full h-full transition-opacity duration-1000 ${index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+        data-slide-index={index}
+        style={`background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${
+          slide.image.startsWith('/') ? slide.image : getAssetUrl(slide.image, { width: 1920, quality: 80 })
+        }); background-size: cover; background-position: center;`}
+      >
+        <div class="container h-full flex items-center">
+          <div class="max-w-3xl text-white pt-20">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 text-white animate-fade-in">
+              {slide.title}
+            </h1>
+            {slide.subtitle && (
+              <p class="text-xl md:text-2xl mb-8 animate-fade-in-delay">
+                {slide.subtitle}
+              </p>
+            )}
+            
+            {slide.button_text && slide.button_link && (
+              <div class="flex flex-wrap gap-4 animate-fade-in-delay-2">
+                <Button href={slide.button_link} variant="primary" size="lg">
+                  {slide.button_text}
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    ))}
   </div>
+
+  <!-- Navigation Controls (only show if multiple slides) -->
+  {displaySlides.length > 1 && (
+    <>
+      <!-- Previous Button -->
+      <button
+        class="hero-prev absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
+        aria-label="Previous slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <!-- Next Button -->
+      <button
+        class="hero-next absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
+        aria-label="Next slide"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Slide Indicators -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {displaySlides.map((_, index) => (
+          <button
+            class={`hero-indicator w-3 h-3 rounded-full transition-all duration-300 ${
+              index === 0 ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
+            }`}
+            data-slide={index}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+    </>
+  )}
 </section>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-delay {
+    animation: fadeIn 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-2 {
+    animation: fadeIn 0.8s ease-out 0.4s forwards;
+    opacity: 0;
+  }
+</style>
+
+<script>
+  // Hero Slideshow functionality
+  function initHeroSlideshow() {
+    const slideshow = document.querySelector('.hero-slideshow');
+    if (!slideshow) return;
+
+    const slides = Array.from(slideshow.querySelectorAll('.hero-slide'));
+    const prevBtn = document.querySelector('.hero-prev');
+    const nextBtn = document.querySelector('.hero-next');
+    const indicators = Array.from(document.querySelectorAll('.hero-indicator'));
+    
+    if (slides.length <= 1) return; // No slideshow needed for single slide
+
+    let currentSlide = 0;
+    let autoplayInterval: number | undefined;
+
+    function showSlide(index: number) {
+      // Hide all slides
+      slides.forEach((slide, i) => {
+        if (i === index) {
+          slide.classList.remove('opacity-0', 'z-0');
+          slide.classList.add('opacity-100', 'z-10');
+        } else {
+          slide.classList.remove('opacity-100', 'z-10');
+          slide.classList.add('opacity-0', 'z-0');
+        }
+      });
+
+      // Update indicators
+      indicators.forEach((indicator, i) => {
+        if (i === index) {
+          indicator.classList.remove('bg-white/50', 'hover:bg-white/75');
+          indicator.classList.add('bg-white', 'w-8');
+        } else {
+          indicator.classList.remove('bg-white', 'w-8');
+          indicator.classList.add('bg-white/50', 'hover:bg-white/75');
+        }
+      });
+
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      const next = (currentSlide + 1) % slides.length;
+      showSlide(next);
+    }
+
+    function prevSlide() {
+      const prev = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(prev);
+    }
+
+    function startAutoplay() {
+      stopAutoplay();
+      autoplayInterval = window.setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoplay() {
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+      }
+    }
+
+    // Event listeners
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        prevSlide();
+        stopAutoplay();
+        startAutoplay(); // Restart autoplay after manual navigation
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        nextSlide();
+        stopAutoplay();
+        startAutoplay();
+      });
+    }
+
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        showSlide(index);
+        stopAutoplay();
+        startAutoplay();
+      });
+    });
+
+    // Pause autoplay on hover
+    slideshow.addEventListener('mouseenter', stopAutoplay);
+    slideshow.addEventListener('mouseleave', startAutoplay);
+
+    // Start autoplay
+    startAutoplay();
+  }
+
+  // Initialize on page load
+  initHeroSlideshow();
+
+  // Re-initialize on page navigation (for SPA-like behavior)
+  document.addEventListener('astro:page-load', initHeroSlideshow);
+</script>
