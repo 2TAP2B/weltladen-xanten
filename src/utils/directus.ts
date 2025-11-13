@@ -88,6 +88,28 @@ type Belief = {
   content: string;
 };
 
+type StaffMember = {
+  id: number;
+  status: string;
+  sort: number;
+  name: string;
+  position: string;
+  bio: string;
+  email: string;
+  phone: string;
+  mobile: string;
+  photo: string;
+  department: string;
+  linkedin_url: string;
+  website_url: string;
+  specializations: string;
+  languages: string;
+  office_hours: string;
+  date_joined: string;
+  date_created: string;
+  date_updated: string;
+};
+
 type Schema = {
   hero_slides: HeroSlide[];
   store_info: StoreInfo;
@@ -96,6 +118,7 @@ type Schema = {
   core_values: CoreValue[];
   history_timeline: HistoryEvent[];
   beliefs: Belief[];
+  staff_members: StaffMember[];
 };
 
 /**
@@ -245,6 +268,45 @@ export async function getBeliefs() {
     return beliefs;
   } catch (error) {
     console.error('Error fetching beliefs:', error);
+    return [];
+  }
+}
+
+/**
+ * Get staff members (Mitarbeiter)
+ * @returns {Promise<Array>} Array of staff members
+ */
+export async function getStaffMembers() {
+  try {
+    const staff = await directus.request(
+      readItems('staff_members', {
+        fields: [
+          'id', 
+          'name', 
+          'position', 
+          'bio', 
+          'email', 
+          'phone', 
+          'mobile', 
+          'photo', 
+          'department', 
+          'linkedin_url', 
+          'website_url', 
+          'specializations', 
+          'languages', 
+          'office_hours', 
+          'date_joined',
+          'sort'
+        ],
+        filter: {
+          status: { _eq: 'published' }
+        },
+        sort: ['sort', 'name']
+      })
+    );
+    return staff;
+  } catch (error) {
+    console.error('Error fetching staff members:', error);
     return [];
   }
 }

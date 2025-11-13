@@ -1,0 +1,445 @@
+{
+  "collection": "staff_members",
+  "meta": {
+    "collection": "staff_members",
+    "icon": "people",
+    "note": "Team members and staff of Eine Welt Gruppe Xanten",
+    "display_template": "{{name}} - {{position}}",
+    "hidden": false,
+    "singleton": false,
+    "translations": [
+      {
+        "language": "en-US",
+        "translation": "Staff Members"
+      },
+      {
+        "language": "de-DE",
+        "translation": "Mitarbeiter"
+      }
+    ],
+    "archive_field": "status",
+    "archive_value": "archived",
+    "unarchive_value": "draft",
+    "archive_app_filter": true,
+    "sort_field": "sort"
+  },
+  "schema": {
+    "schema": "public",
+    "name": "staff_members"
+  },
+  "fields": [
+    {
+      "collection": "staff_members",
+      "field": "id",
+      "type": "integer",
+      "meta": {
+        "hidden": true,
+        "interface": "input",
+        "readonly": true,
+        "sort": 1
+      },
+      "schema": {
+        "name": "id",
+        "table": "staff_members",
+        "data_type": "integer",
+        "is_primary_key": true,
+        "has_auto_increment": true,
+        "is_nullable": false
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "status",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "options": {
+          "choices": [
+            {
+              "text": "Entwurf",
+              "value": "draft"
+            },
+            {
+              "text": "Veröffentlicht", 
+              "value": "published"
+            },
+            {
+              "text": "Archiviert",
+              "value": "archived"
+            }
+          ]
+        },
+        "interface": "select-dropdown",
+        "default_value": "draft",
+        "sort": 2
+      },
+      "schema": {
+        "name": "status",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": false,
+        "default_value": "draft"
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "sort",
+      "type": "integer",
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "default_value": 1,
+        "note": "Sortierreihenfolge (niedrigere Zahlen = höhere Priorität)",
+        "sort": 3
+      },
+      "schema": {
+        "name": "sort",
+        "table": "staff_members",
+        "data_type": "integer",
+        "is_nullable": true,
+        "default_value": 1
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "name",
+      "type": "string",
+      "meta": {
+        "width": "full",
+        "interface": "input",
+        "required": true,
+        "note": "Vollständiger Name des Mitarbeiters",
+        "sort": 4
+      },
+      "schema": {
+        "name": "name",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": false
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "position",
+      "type": "string", 
+      "meta": {
+        "width": "full",
+        "interface": "input",
+        "required": true,
+        "note": "Position oder Rolle in der Organisation",
+        "sort": 5
+      },
+      "schema": {
+        "name": "position",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": false
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "bio",
+      "type": "text",
+      "meta": {
+        "width": "full",
+        "interface": "textarea",
+        "options": {
+          "rows": 4
+        },
+        "note": "Biografische Information und Aufgabenbeschreibung",
+        "sort": 6
+      },
+      "schema": {
+        "name": "bio",
+        "table": "staff_members", 
+        "data_type": "text",
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "photo",
+      "type": "uuid",
+      "meta": {
+        "width": "half",
+        "interface": "file-image",
+        "note": "Profilbild des Mitarbeiters",
+        "sort": 7
+      },
+      "schema": {
+        "name": "photo",
+        "table": "staff_members",
+        "data_type": "uuid",
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "email",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "validation": {
+          "_and": [
+            {
+              "email": {}
+            }
+          ]
+        },
+        "note": "Haupt E-Mail Adresse",
+        "sort": 8
+      },
+      "schema": {
+        "name": "email",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "phone",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "note": "Festnetz oder Bürotelefon",
+        "sort": 9
+      },
+      "schema": {
+        "name": "phone", 
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "mobile",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "note": "Mobiltelefonnummer (optional)",
+        "sort": 10
+      },
+      "schema": {
+        "name": "mobile",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "department",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "select-dropdown",
+        "options": {
+          "choices": [
+            {
+              "text": "Geschäftsführung",
+              "value": "management"
+            },
+            {
+              "text": "Bildung", 
+              "value": "education"
+            },
+            {
+              "text": "Projekte",
+              "value": "projects"
+            },
+            {
+              "text": "Marketing",
+              "value": "marketing"
+            },
+            {
+              "text": "Verwaltung",
+              "value": "administration"
+            },
+            {
+              "text": "Freiwillige",
+              "value": "volunteers"
+            }
+          ]
+        },
+        "sort": 11
+      },
+      "schema": {
+        "name": "department",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "specializations",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "note": "Fachbereiche und Schwerpunkte (kommagetrennt)",
+        "sort": 12
+      },
+      "schema": {
+        "name": "specializations",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 500,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "languages",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "note": "Gesprochene Sprachen (kommagetrennt)",
+        "sort": 13
+      },
+      "schema": {
+        "name": "languages",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "office_hours",
+      "type": "string", 
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "note": "Büro- oder Sprechzeiten",
+        "sort": 14
+      },
+      "schema": {
+        "name": "office_hours",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 255,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "linkedin_url",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "input",
+        "validation": {
+          "_and": [
+            {
+              "url": {}
+            }
+          ]
+        },
+        "note": "LinkedIn Profil (optional)",
+        "sort": 15
+      },
+      "schema": {
+        "name": "linkedin_url",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 500,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "website_url",
+      "type": "string",
+      "meta": {
+        "width": "half",
+        "interface": "input", 
+        "validation": {
+          "_and": [
+            {
+              "url": {}
+            }
+          ]
+        },
+        "note": "Persönliche Website (optional)",
+        "sort": 16
+      },
+      "schema": {
+        "name": "website_url",
+        "table": "staff_members",
+        "data_type": "varchar",
+        "max_length": 500,
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "date_joined",
+      "type": "date",
+      "meta": {
+        "width": "half",
+        "interface": "date",
+        "note": "Datum des Eintritts in die Organisation",
+        "sort": 17
+      },
+      "schema": {
+        "name": "date_joined",
+        "table": "staff_members",
+        "data_type": "date",
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "date_created",
+      "type": "timestamp",
+      "meta": {
+        "width": "half",
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "special": ["date-created"],
+        "sort": 18
+      },
+      "schema": {
+        "name": "date_created",
+        "table": "staff_members",
+        "data_type": "timestamp",
+        "is_nullable": true
+      }
+    },
+    {
+      "collection": "staff_members",
+      "field": "date_updated",
+      "type": "timestamp",
+      "meta": {
+        "width": "half",
+        "interface": "datetime",
+        "readonly": true,
+        "hidden": false,
+        "special": ["date-updated"],
+        "sort": 19
+      },
+      "schema": {
+        "name": "date_updated",
+        "table": "staff_members",
+        "data_type": "timestamp",
+        "is_nullable": true
+      }
+    }
+  ]
+}

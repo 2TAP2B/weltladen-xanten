@@ -68,43 +68,42 @@ const displaySlides = slides.length > 0 ? slides : defaultSlides;
   <!-- Navigation Controls (only show if multiple slides) -->
   {displaySlides.length > 1 && (
     <>
-      <!-- Previous Button - Hidden on mobile -->
-      <button
-        class="hero-prev absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300 hidden md:block"
-        aria-label="Previous slide"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
+      <!-- Navigation: indicators + arrows at bottom -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+        <!-- Navigation row with arrows and indicators -->
+        <div class="flex items-center gap-4">
+          <!-- Previous Button -->
+          <button
+            class="hero-prev bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-2 rounded-full transition-all duration-300"
+            aria-label="Vorheriger Slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
 
-      <!-- Next Button - Hidden on mobile -->
-      <button
-        class="hero-next absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300 hidden md:block"
-        aria-label="Next slide"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+          <!-- Slide Indicators -->
+          <div class="flex gap-2">
+            {displaySlides.map((_, index) => (
+              <button
+                class={`hero-indicator w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === 0 ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
+                }`}
+                data-slide={index}
+                aria-label={`Gehe zu Slide ${index + 1}`}
+              />
+            ))}
+          </div>
 
-      <!-- Slide Indicators -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-        <!-- Swipe hint for mobile (only show if multiple slides) -->
-        <div class="md:hidden text-white/80 text-sm font-medium animate-pulse">
-          ← Swipe →
-        </div>
-        
-        <div class="flex gap-2">
-          {displaySlides.map((_, index) => (
-            <button
-              class={`hero-indicator w-3 h-3 rounded-full transition-all duration-300 ${
-                index === 0 ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
-              }`}
-              data-slide={index}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+          <!-- Next Button -->
+          <button
+            class="hero-next bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white p-2 rounded-full transition-all duration-300"
+            aria-label="Nächster Slide"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </div>
     </>

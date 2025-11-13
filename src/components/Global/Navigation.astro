@@ -1,43 +1,109 @@
 ---
-// Define the navigation items
+// Define the navigation items with grouped structure
 const navItems = [
   { text: "Home", href: "/" },
-  { text: "Über uns", href: "/ueber-uns" },
-  { text: "Staff", href: "/staff" },
-  { text: "Ministries", href: "/ministries" },
-  { text: "Sermons", href: "/sermons" },
-  { text: "Events", href: "/events" },
-  { text: "Blog", href: "/blog" },
-  { text: "I'm New", href: "/im-new" },
-  { text: "Contact", href: "/contact" },
-  { text: "Giving", href: "/giving" },
+  { 
+    text: "Über uns", 
+    href: "/ueber-uns",
+    children: [
+      { text: "Über uns", href: "/ueber-uns" },
+      { text: "Mitarbeiter", href: "/mitarbeiter" },
+    ]
+  },
+  { 
+    text: "Inhalte", 
+    href: "#",
+    children: [
+      { text: "Ministries", href: "/ministries" },
+      { text: "Sermons", href: "/sermons" },
+      { text: "Events", href: "/events" },
+      { text: "Blog", href: "/blog" },
+    ]
+  },
+  { 
+    text: "Kontakt", 
+    href: "#",
+    children: [
+      { text: "I'm New", href: "/im-new" },
+      { text: "Contact", href: "/contact" },
+      { text: "Giving", href: "/giving" },
+    ]
+  }
 ];
 
 // Get the current URL path to highlight the active link
 const currentPath = Astro.url.pathname;
 ---
 
-<!-- Desktop Navigation -->
-<nav class="hidden lg:block">
+<!-- Desktop Navigation - Only show on larger screens -->
+<nav class="hidden xl:block">
   <ul class="flex items-center space-x-6">
     {
       navItems.map((item) => {
         const isActive = currentPath === item.href || 
-                         (item.href !== "/" && currentPath.startsWith(item.href));
+                         (item.href !== "/" && item.href !== "#" && currentPath.startsWith(item.href)) ||
+                         (item.children && item.children.some(child => 
+                           currentPath === child.href || 
+                           (child.href !== "/" && currentPath.startsWith(child.href))
+                         ));
         
-        return (
-          <li>
-            <a
-              href={item.href}
-              class={`text-base font-medium transition-colors hover:text-primary-600 dark:hover:text-primary-400 ${
-                isActive ? "text-primary-600 dark:text-primary-400" : "text-gray-700 dark:text-gray-300"
-              }`}
-              aria-current={isActive ? "page" : undefined}
-            >
-              {item.text}
-            </a>
-          </li>
-        );
+        if (item.children) {
+          // Dropdown menu item
+          return (
+            <li class="relative group">
+              <button
+                class={`text-base font-medium transition-colors hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-1 ${
+                  isActive ? "text-primary-600 dark:text-primary-400" : "text-gray-700 dark:text-gray-300"
+                }`}
+                aria-expanded="false"
+                aria-haspopup="true"
+              >
+                {item.text}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              <!-- Dropdown menu -->
+              <div class="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div class="py-2">
+                  {item.children.map((child) => {
+                    const childIsActive = currentPath === child.href || 
+                                          (child.href !== "/" && currentPath.startsWith(child.href));
+                    return (
+                      <a
+                        href={child.href}
+                        class={`block px-4 py-2 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 ${
+                          childIsActive 
+                            ? "text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30" 
+                            : "text-gray-700 dark:text-gray-300"
+                        }`}
+                        aria-current={childIsActive ? "page" : undefined}
+                      >
+                        {child.text}
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </li>
+          );
+        } else {
+          // Regular menu item
+          return (
+            <li>
+              <a
+                href={item.href}
+                class={`text-base font-medium transition-colors hover:text-primary-600 dark:hover:text-primary-400 ${
+                  isActive ? "text-primary-600 dark:text-primary-400" : "text-gray-700 dark:text-gray-300"
+                }`}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.text}
+              </a>
+            </li>
+          );
+        }
       })
     }
     
@@ -76,10 +142,10 @@ const currentPath = Astro.url.pathname;
   </ul>
 </nav>
 
-<!-- Mobile Menu Button -->
+<!-- Mobile Menu Button - Show on mobile and tablet -->
 <button
   id="mobile-menu-button"
-  class="lg:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none transition-colors relative"
+  class="xl:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none transition-colors relative"
   aria-label="Toggle Menu"
   aria-expanded="false"
 >
@@ -91,32 +157,61 @@ const currentPath = Astro.url.pathname;
 <!-- Mobile Menu Dropdown - Compact & Clean -->
 <div
   id="mobile-menu"
-  class="absolute top-full left-0 right-0 bg-white dark:bg-gray-900 shadow-lg border-t border-gray-100 dark:border-gray-800 transform scale-y-0 origin-top transition-transform duration-200 ease-out lg:hidden z-50"
+  class="absolute top-full left-0 right-0 bg-white dark:bg-gray-900 shadow-lg border-t border-gray-100 dark:border-gray-800 transform scale-y-0 origin-top transition-transform duration-200 ease-out xl:hidden z-50"
   role="menu"
   aria-labelledby="mobile-menu-button"
 >
   <!-- Navigation Links in Grid -->
   <div class="px-4 py-6">
-    <div class="grid grid-cols-2 gap-3">
+    <div class="space-y-1">
       {
         navItems.map((item) => {
-          const isActive = currentPath === item.href || 
-                           (item.href !== "/" && currentPath.startsWith(item.href));
-          
-          return (
-            <a
-              href={item.href}
-              class={`block px-4 py-3 text-sm font-medium rounded-lg transition-colors text-center ${
-                isActive 
-                  ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800" 
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 border border-transparent"
-              }`}
-              role="menuitem"
-              aria-current={isActive ? "page" : undefined}
-            >
-              {item.text}
-            </a>
-          );
+          if (item.children) {
+            // Group with children
+            return (
+              <div class="space-y-1">
+                <div class="px-4 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  {item.text}
+                </div>
+                {item.children.map((child) => {
+                  const childIsActive = currentPath === child.href || 
+                                        (child.href !== "/" && currentPath.startsWith(child.href));
+                  return (
+                    <a
+                      href={child.href}
+                      class={`block px-6 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        childIsActive 
+                          ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800" 
+                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 border border-transparent"
+                      }`}
+                      role="menuitem"
+                      aria-current={childIsActive ? "page" : undefined}
+                    >
+                      {child.text}
+                    </a>
+                  );
+                })}
+              </div>
+            );
+          } else {
+            // Single item
+            const isActive = currentPath === item.href || 
+                             (item.href !== "/" && currentPath.startsWith(item.href));
+            return (
+              <a
+                href={item.href}
+                class={`block px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                  isActive 
+                    ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800" 
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 border border-transparent"
+                }`}
+                role="menuitem"
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.text}
+              </a>
+            );
+          }
         })
       }
     </div>
@@ -222,7 +317,7 @@ const currentPath = Astro.url.pathname;
     
     // Handle window resize
     window.addEventListener('resize', () => {
-      if (window.innerWidth >= 1024 && isMenuOpen) {
+      if (window.innerWidth >= 1280 && isMenuOpen) { // xl breakpoint
         toggleMobileMenu();
       }
     });
