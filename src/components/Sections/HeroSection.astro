@@ -68,9 +68,9 @@ const displaySlides = slides.length > 0 ? slides : defaultSlides;
   <!-- Navigation Controls (only show if multiple slides) -->
   {displaySlides.length > 1 && (
     <>
-      <!-- Previous Button -->
+      <!-- Previous Button - Hidden on mobile -->
       <button
-        class="hero-prev absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
+        class="hero-prev absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300 hidden md:block"
         aria-label="Previous slide"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,9 +78,9 @@ const displaySlides = slides.length > 0 ? slides : defaultSlides;
         </svg>
       </button>
 
-      <!-- Next Button -->
+      <!-- Next Button - Hidden on mobile -->
       <button
-        class="hero-next absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
+        class="hero-next absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300 hidden md:block"
         aria-label="Next slide"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,16 +89,23 @@ const displaySlides = slides.length > 0 ? slides : defaultSlides;
       </button>
 
       <!-- Slide Indicators -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {displaySlides.map((_, index) => (
-          <button
-            class={`hero-indicator w-3 h-3 rounded-full transition-all duration-300 ${
-              index === 0 ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
-            }`}
-            data-slide={index}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+        <!-- Swipe hint for mobile (only show if multiple slides) -->
+        <div class="md:hidden text-white/80 text-sm font-medium animate-pulse">
+          ← Swipe →
+        </div>
+        
+        <div class="flex gap-2">
+          {displaySlides.map((_, index) => (
+            <button
+              class={`hero-indicator w-3 h-3 rounded-full transition-all duration-300 ${
+                index === 0 ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
+              }`}
+              data-slide={index}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </>
   )}
@@ -222,6 +229,38 @@ const displaySlides = slides.length > 0 ? slides : defaultSlides;
     // Pause autoplay on hover
     slideshow.addEventListener('mouseenter', stopAutoplay);
     slideshow.addEventListener('mouseleave', startAutoplay);
+
+    // Touch/Swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    slideshow.addEventListener('touchstart', (e) => {
+      const touchEvent = e as TouchEvent;
+      touchStartX = touchEvent.changedTouches[0].screenX;
+      stopAutoplay(); // Stop autoplay during touch
+    });
+    
+    slideshow.addEventListener('touchend', (e) => {
+      const touchEvent = e as TouchEvent;
+      touchEndX = touchEvent.changedTouches[0].screenX;
+      handleSwipe();
+      startAutoplay(); // Restart autoplay after swipe
+    });
+    
+    function handleSwipe() {
+      const swipeThreshold = 50; // Minimum distance for a swipe
+      const swipeDistance = touchEndX - touchStartX;
+      
+      if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+          // Swipe right - go to previous slide
+          prevSlide();
+        } else {
+          // Swipe left - go to next slide
+          nextSlide();
+        }
+      }
+    }
 
     // Start autoplay
     startAutoplay();
