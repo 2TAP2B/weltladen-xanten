@@ -1,6 +1,6 @@
 {
-    "name": "Church Name",
-    "short_name": "Church Name",
+    "name": "Eine Welt Gruppe Xanten e.V.",
+    "short_name": "EWG Xanten",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
+    "theme_color": "#f97316",
     "background_color": "#ffffff",
     "display": "standalone"
 }

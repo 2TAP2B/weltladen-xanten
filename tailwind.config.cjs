@@ -47,7 +47,18 @@ module.exports = {
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Source Sans Pro"', 'system-ui', 'sans-serif'],
+        sans: [
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          '"Segoe UI"', 
+          'Roboto', 
+          '"Helvetica Neue"', 
+          'Arial', 
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"'
+        ],
       },
     },
   },

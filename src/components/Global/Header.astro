@@ -2,17 +2,250 @@
 import Navigation from "./Navigation.astro";
 ---
 
-<header class="sticky top-0 z-50 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm dark:shadow-gray-700/10">
-  <div class="container flex items-center justify-between h-20">
-    <a href="/" class="flex items-center">
-      <span class="sr-only">Eine Welt Gruppe Xanten</span>
-      <img 
-        src="/eine-welt-gruppe2.webp" 
-        alt="Eine Welt Gruppe Xanten Logo" 
-        class="h-10 sm:h-14 lg:h-16 w-auto"
-      />
-    </a>
-    
-    <Navigation />
-  </div>
+<!-- Orange Top Bar - Not Sticky -->
+<div class="w-full bg-gradient-to-r from-orange-500 to-orange-600 dark:from-orange-600 dark:to-orange-700">
+    <div class="container">
+      <div class="flex items-center justify-between h-9 text-sm">
+        <!-- Quick Links -->
+        <nav class="hidden md:flex items-center space-x-4 lg:space-x-6">
+          <a href="/" class="text-white hover:text-orange-100 transition-colors font-medium">
+            Startseite
+          </a>
+          <a href="/impressum" class="text-white hover:text-orange-100 transition-colors font-medium">
+            Impressum
+          </a>
+          <a href="/datenschutz" class="text-white hover:text-orange-100 transition-colors font-medium">
+            Datenschutz
+          </a>
+        </nav>
+        
+        <!-- Mobile: Just social icons -->
+        <div class="md:hidden"></div>
+        
+        <!-- Social Media Icons -->
+        <div class="flex items-center space-x-3">
+          <a 
+            href="https://facebook.com/eineweltgruppexanten" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-white hover:text-orange-100 transition-colors"
+            aria-label="Facebook"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+            </svg>
+          </a>
+          <a 
+            href="https://twitter.com/eineweltxanten" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-white hover:text-orange-100 transition-colors"
+            aria-label="Twitter/X"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <a 
+            href="https://instagram.com/eineweltgruppexanten" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-white hover:text-orange-100 transition-colors"
+            aria-label="Instagram"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+</div>
+  
+<!-- Main Header with Logo and Navigation - Sticky -->
+<header class="sticky top-0 z-50 w-full bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <div class="container">
+      <div class="flex items-center justify-between py-1.5 md:py-2">
+        <!-- Logo -->
+        <a href="/" class="flex items-center flex-shrink-0 -my-1">
+          <span class="sr-only">Eine Welt Gruppe Xanten</span>
+          <img 
+            src="/eine-welt-gruppe2.webp" 
+            alt="Eine Welt Gruppe Xanten Logo" 
+            class="h-16 sm:h-20 md:h-24 lg:h-28 w-auto"
+          />
+        </a>
+        
+        <!-- Navigation and Search -->
+        <div class="flex items-center gap-4">
+          <!-- Search Button -->
+          <button
+            id="search-button"
+            class="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+            aria-label="Suche öffnen"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+          
+          <Navigation />
+        </div>
+      </div>
+    </div>
 </header>
+
+<!-- Search Modal -->
+<div 
+  id="search-modal" 
+  class="fixed inset-0 bg-black/50 dark:bg-black/70 z-[100] hidden backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="search-title"
+>
+  <div class="flex items-start justify-center min-h-screen pt-20 px-4">
+    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-2xl">
+      <!-- Search Header -->
+      <div class="flex items-center gap-4 p-6 border-b border-gray-200 dark:border-gray-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Suche nach Inhalten..."
+          class="flex-1 bg-transparent border-none focus:outline-none text-lg text-gray-900 dark:text-gray-100 placeholder-gray-400"
+          aria-label="Suchfeld"
+        />
+        <button
+          id="search-close"
+          class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          aria-label="Suche schließen"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Search Results -->
+      <div id="search-results" class="p-6 max-h-96 overflow-y-auto">
+        <p class="text-gray-500 dark:text-gray-400 text-center py-8">
+          Geben Sie einen Suchbegriff ein...
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Search Modal Functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchButton = document.getElementById('search-button');
+    const searchModal = document.getElementById('search-modal');
+    const searchClose = document.getElementById('search-close');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    const searchResults = document.getElementById('search-results');
+    
+    // Open search modal
+    const openSearch = () => {
+      searchModal?.classList.remove('hidden');
+      searchInput?.focus();
+      document.body.style.overflow = 'hidden';
+    };
+    
+    // Close search modal
+    const closeSearch = () => {
+      searchModal?.classList.add('hidden');
+      if (searchInput) searchInput.value = '';
+      if (searchResults) {
+        searchResults.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-center py-8">Geben Sie einen Suchbegriff ein...</p>';
+      }
+      document.body.style.overflow = '';
+    };
+    
+    // Event listeners
+    searchButton?.addEventListener('click', openSearch);
+    searchClose?.addEventListener('click', closeSearch);
+    
+    // Close on backdrop click
+    searchModal?.addEventListener('click', (e) => {
+      if (e.target === searchModal) {
+        closeSearch();
+      }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !searchModal?.classList.contains('hidden')) {
+        closeSearch();
+      }
+    });
+    
+    // Keyboard shortcut: Ctrl+K or Cmd+K
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+      }
+    });
+    
+    // Simple search functionality
+    let searchTimeout: number;
+    searchInput?.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      const query = (e.target as HTMLInputElement).value.trim().toLowerCase();
+      
+      if (!query) {
+        if (searchResults) {
+          searchResults.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-center py-8">Geben Sie einen Suchbegriff ein...</p>';
+        }
+        return;
+      }
+      
+      // Show loading state
+      if (searchResults) {
+        searchResults.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-center py-8">Suche läuft...</p>';
+      }
+      
+      // Debounce search
+      searchTimeout = window.setTimeout(() => {
+        performSearch(query);
+      }, 300);
+    });
+    
+    // Simple client-side search function
+    function performSearch(query: string) {
+      // This is a basic implementation - you can enhance it with actual search logic
+      const searchablePages = [
+        { title: 'Über uns', url: '/ueber-uns', description: 'Erfahren Sie mehr über die Eine Welt Gruppe Xanten' },
+        { title: 'Mitarbeiter', url: '/mitarbeiter', description: 'Unser engagiertes Team' },
+        { title: 'Weltladen', url: '/weltladen', description: 'Faire Produkte aus aller Welt' },
+        { title: 'Kontakt', url: '/contact', description: 'Nehmen Sie Kontakt mit uns auf' },
+        { title: 'Events', url: '/events', description: 'Kommende Veranstaltungen' },
+        { title: 'Blog', url: '/blog', description: 'Neuigkeiten und Artikel' },
+      ];
+      
+      const results = searchablePages.filter(page => 
+        page.title.toLowerCase().includes(query) || 
+        page.description.toLowerCase().includes(query)
+      );
+      
+      if (searchResults) {
+        if (results.length === 0) {
+          searchResults.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-center py-8">Keine Ergebnisse gefunden.</p>';
+        } else {
+          searchResults.innerHTML = results.map(result => `
+            <a 
+              href="${result.url}" 
+              class="block p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mb-2"
+            >
+              <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">${result.title}</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-400">${result.description}</p>
+            </a>
+          `).join('');
+        }
+      }
+    }
+  });
+</script>

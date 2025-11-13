@@ -16,11 +16,11 @@ export interface Props {
 }
 
 const {
-  title = "Church Name - A Welcoming Christian Community",
-  description = "We are a welcoming Christian community dedicated to sharing God's love through worship, fellowship, and service.",
+  title = "Eine Welt Gruppe Xanten e.V.",
+  description = "Wir sind eine engagierte Gruppe, die sich für fairen Handel und globale Gerechtigkeit einsetzt. Besuchen Sie unseren Weltladen in Xanten.",
   image = {
-    url: "/uploads/church-default.webp",
-    alt: "Church Name",
+    url: "/eine-welt-gruppe2.webp",
+    alt: "Eine Welt Gruppe Xanten",
   },
   type = "website",
   canonicalUrl,
@@ -28,20 +28,20 @@ const {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/webp" href="/eine-welt-gruppe2.webp" />
     <meta name="generator" content={Astro.generator} />
     
     <!-- Dark mode initialization script (prevents flash) -->
     <script is:inline>
       // Check for saved theme preference or default to light mode
       const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      // Only apply dark mode if explicitly saved as 'dark'
+      if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
       }
     </script>

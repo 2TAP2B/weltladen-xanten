@@ -1,7 +1,7 @@
 {
   "servers": {
     "directus": {
-      "type": "https",
+      "type": "http",
       "url": "https://ewgx.steltner.cc/mcp",
       "headers": {
         "Authorization": "Bearer ${input:directus-token}"
@@ -12,7 +12,7 @@
     {
       "id": "directus-token",
       "type": "promptString",
-      "description": "Directus Access Token",
+      "description": "Directus Access Token (Administrator role required)",
       "password": true
     }
   ]

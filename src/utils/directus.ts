@@ -91,23 +91,20 @@ type Belief = {
 type StaffMember = {
   id: number;
   status: string;
-  sort: number;
+  sort: number | null;
   name: string;
   position: string;
   bio: string;
   email: string;
   phone: string;
-  mobile: string;
-  photo: string;
-  department: string;
-  linkedin_url: string;
-  website_url: string;
-  specializations: string;
-  languages: string;
-  office_hours: string;
-  date_joined: string;
-  date_created: string;
-  date_updated: string;
+  photo: string | null;
+};
+
+type StaffPageHeader = {
+  id: number;
+  title: string;
+  subtitle: string;
+  background_image: string | null;
 };
 
 type Schema = {
@@ -119,6 +116,7 @@ type Schema = {
   history_timeline: HistoryEvent[];
   beliefs: Belief[];
   staff_members: StaffMember[];
+  staff_page_header: StaffPageHeader;
 };
 
 /**
@@ -287,15 +285,8 @@ export async function getStaffMembers() {
           'bio', 
           'email', 
           'phone', 
-          'mobile', 
           'photo', 
-          'department', 
-          'linkedin_url', 
-          'website_url', 
-          'specializations', 
-          'languages', 
-          'office_hours', 
-          'date_joined',
+          'status',
           'sort'
         ],
         filter: {
@@ -308,6 +299,24 @@ export async function getStaffMembers() {
   } catch (error) {
     console.error('Error fetching staff members:', error);
     return [];
+  }
+}
+
+/**
+ * Get staff page header content
+ * @returns {Promise<StaffPageHeader | null>} Staff page header content
+ */
+export async function getStaffPageHeader() {
+  try {
+    const header = await directus.request(
+      readSingleton('staff_page_header', {
+        fields: ['title', 'subtitle', 'background_image']
+      })
+    );
+    return header;
+  } catch (error) {
+    console.error('Error fetching staff page header:', error);
+    return null;
   }
 }
 

@@ -3,6 +3,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageHeader from "../components/Sections/PageHeader.astro";
 import StaffList from "../components/Sections/StaffList.astro";
 import Button from "../components/UI/Button.astro";
+import { getStaffPageHeader, getAssetUrl } from "../utils/directus";
+
+// Fetch staff page header from Directus
+const staffHeader = await getStaffPageHeader();
+
+// Use Directus content if available, otherwise use defaults
+const title = staffHeader?.title || "Unser Team";
+const subtitle = staffHeader?.subtitle || "Die Menschen hinter der Eine Welt Gruppe Xanten";
+const backgroundImage = staffHeader?.background_image 
+  ? getAssetUrl(staffHeader.background_image, { width: 1920, height: 600, fit: 'cover', quality: 80 })
+  : "/uploads/page-header-bg.webp";
 ---
 
 <BaseLayout
@@ -10,9 +21,9 @@ import Button from "../components/UI/Button.astro";
   description="Lernen Sie unser engagiertes Team kennen, das sich für eine gerechtere Welt einsetzt."
 >
   <PageHeader 
-    title="Unser Team" 
-    subtitle="Die Menschen hinter der Eine Welt Gruppe Xanten"
-    backgroundImage="/uploads/page-header-bg.webp"
+    title={title}
+    subtitle={subtitle}
+    backgroundImage={backgroundImage}
   />
   
   <!-- Staff List -->

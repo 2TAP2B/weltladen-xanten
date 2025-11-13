@@ -1,0 +1,11 @@
+{
+    "chat.mcp.serverSampling": {
+        "weltladen-xanten/.vscode/mcp.json: directus": {
+            "allowedModels": [
+                "copilot/auto",
+                "copilot/claude-sonnet-4",
+                "copilot/gpt-5-mini"
+            ]
+        }
+    }
+}
