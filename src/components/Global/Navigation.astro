@@ -2,7 +2,7 @@
 // Define the navigation items
 const navItems = [
   { text: "Home", href: "/" },
-  { text: "About Us", href: "/about-us" },
+  { text: "Über uns", href: "/ueber-uns" },
   { text: "Staff", href: "/staff" },
   { text: "Ministries", href: "/ministries" },
   { text: "Sermons", href: "/sermons" },
@@ -29,8 +29,8 @@ const currentPath = Astro.url.pathname;
           <li>
             <a
               href={item.href}
-              class={`text-base font-medium transition-colors hover:text-primary-600 ${
-                isActive ? "text-primary-600" : "text-gray-700"
+              class={`text-base font-medium transition-colors hover:text-primary-600 dark:hover:text-primary-400 ${
+                isActive ? "text-primary-600 dark:text-primary-400" : "text-gray-700 dark:text-gray-300"
               }`}
               aria-current={isActive ? "page" : undefined}
             >
@@ -41,13 +41,31 @@ const currentPath = Astro.url.pathname;
       })
     }
     
+    <!-- Dark Mode Toggle -->
+    <li>
+      <button
+        id="theme-toggle"
+        class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors p-2"
+        aria-label="Toggle dark mode"
+      >
+        <!-- Sun Icon (shown in dark mode) -->
+        <svg id="theme-toggle-light-icon" class="hidden h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+        <!-- Moon Icon (shown in light mode) -->
+        <svg id="theme-toggle-dark-icon" class="hidden h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+      </button>
+    </li>
+    
     <!-- GitHub Icon -->
     <li>
       <a
         href="https://github.com/MauCariApa-com/maucariapacom-church-starter"
         target="_blank"
         rel="noopener noreferrer"
-        class="text-gray-700 hover:text-primary-600 transition-colors p-2"
+        class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors p-2"
         aria-label="View on GitHub"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -61,7 +79,7 @@ const currentPath = Astro.url.pathname;
 <!-- Mobile Menu Button -->
 <button
   id="mobile-menu-button"
-  class="lg:hidden p-2 text-gray-700 hover:text-primary-600 focus:outline-none transition-colors relative"
+  class="lg:hidden p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:outline-none transition-colors relative"
   aria-label="Toggle Menu"
   aria-expanded="false"
 >
@@ -73,7 +91,7 @@ const currentPath = Astro.url.pathname;
 <!-- Mobile Menu Dropdown - Compact & Clean -->
 <div
   id="mobile-menu"
-  class="absolute top-full left-0 right-0 bg-white shadow-lg border-t border-gray-100 transform scale-y-0 origin-top transition-transform duration-200 ease-out lg:hidden z-50"
+  class="absolute top-full left-0 right-0 bg-white dark:bg-gray-900 shadow-lg border-t border-gray-100 dark:border-gray-800 transform scale-y-0 origin-top transition-transform duration-200 ease-out lg:hidden z-50"
   role="menu"
   aria-labelledby="mobile-menu-button"
 >
@@ -90,8 +108,8 @@ const currentPath = Astro.url.pathname;
               href={item.href}
               class={`block px-4 py-3 text-sm font-medium rounded-lg transition-colors text-center ${
                 isActive 
-                  ? "bg-primary-50 text-primary-600 border border-primary-200" 
-                  : "text-gray-700 hover:bg-gray-50 hover:text-primary-600 border border-transparent"
+                  ? "bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800" 
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 border border-transparent"
               }`}
               role="menuitem"
               aria-current={isActive ? "page" : undefined}
@@ -104,12 +122,12 @@ const currentPath = Astro.url.pathname;
     </div>
     
     <!-- GitHub Link -->
-    <div class="mt-4 pt-4 border-t border-gray-100">
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
       <a
         href="https://github.com/MauCariApa-com/maucariapacom-church-starter"
         target="_blank"
         rel="noopener noreferrer"
-        class="flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors rounded-lg hover:bg-gray-50"
+        class="flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
         role="menuitem"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -161,12 +179,12 @@ const currentPath = Astro.url.pathname;
       
       if (isMenuOpen) {
         // Show menu
-        mobileMenu.classList.add('show');
-        mobileMenuButton.setAttribute('aria-expanded', 'true');
+        mobileMenu?.classList.add('show');
+        mobileMenuButton?.setAttribute('aria-expanded', 'true');
       } else {
         // Hide menu
-        mobileMenu.classList.remove('show');
-        mobileMenuButton.setAttribute('aria-expanded', 'false');
+        mobileMenu?.classList.remove('show');
+        mobileMenuButton?.setAttribute('aria-expanded', 'false');
       }
     };
     
@@ -178,7 +196,9 @@ const currentPath = Astro.url.pathname;
     
     // Close menu when clicking outside
     document.addEventListener('click', (e) => {
-      if (isMenuOpen && !mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+      const target = e.target as Node;
+      if (isMenuOpen && mobileMenu && mobileMenuButton && 
+          !mobileMenu.contains(target) && !mobileMenuButton.contains(target)) {
         toggleMobileMenu();
       }
     });
@@ -204,6 +224,53 @@ const currentPath = Astro.url.pathname;
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 1024 && isMenuOpen) {
         toggleMobileMenu();
+      }
+    });
+  });
+
+  // Dark mode functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const html = document.documentElement;
+    
+    // Function to set theme
+    const setTheme = (isDark: boolean) => {
+      if (isDark) {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        lightIcon?.classList.remove('hidden');
+        darkIcon?.classList.add('hidden');
+      } else {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        lightIcon?.classList.add('hidden');
+        darkIcon?.classList.remove('hidden');
+      }
+    };
+    
+    // Check for saved theme preference or default to light mode
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    // Initialize theme
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      setTheme(true);
+    } else {
+      setTheme(false);
+    }
+    
+    // Toggle theme on button click
+    themeToggle?.addEventListener('click', () => {
+      const isDark = html.classList.contains('dark');
+      setTheme(!isDark);
+    });
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        setTheme(e.matches);
       }
     });
   });

@@ -47,10 +47,55 @@ type Organization = {
   link: string;
 };
 
+type AboutPage = {
+  id: number;
+  header_title: string;
+  header_subtitle: string;
+  header_background_image: string;
+  mission_title: string;
+  mission_text: string;
+  vision_title: string;
+  vision_text: string;
+  mission_image: string;
+  history_title: string;
+  history_subtitle: string;
+};
+
+type CoreValue = {
+  id: number;
+  status: string;
+  sort: number;
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+};
+
+type HistoryEvent = {
+  id: number;
+  status: string;
+  sort: number;
+  year: string;
+  title: string;
+  description: string;
+};
+
+type Belief = {
+  id: number;
+  status: string;
+  sort: number;
+  title: string;
+  content: string;
+};
+
 type Schema = {
   hero_slides: HeroSlide[];
   store_info: StoreInfo;
   organizations: Organization[];
+  about_page: AboutPage;
+  core_values: CoreValue[];
+  history_timeline: HistoryEvent[];
+  beliefs: Belief[];
 };
 
 /**
@@ -116,6 +161,90 @@ export async function getOrganizations() {
     return organizations;
   } catch (error) {
     console.error('Error fetching organizations:', error);
+    return [];
+  }
+}
+
+/**
+ * Get about page content singleton
+ * @returns {Promise<AboutPage | null>} About page content
+ */
+export async function getAboutPage() {
+  try {
+    const aboutPage = await directus.request(
+      readSingleton('about_page', {
+        fields: ['*']
+      })
+    );
+    return aboutPage;
+  } catch (error) {
+    console.error('Error fetching about page:', error);
+    return null;
+  }
+}
+
+/**
+ * Get core values for about page
+ * @returns {Promise<Array>} Array of core values
+ */
+export async function getCoreValues() {
+  try {
+    const values = await directus.request(
+      readItems('core_values', {
+        fields: ['id', 'title', 'description', 'icon', 'color', 'sort'],
+        filter: {
+          status: { _eq: 'published' }
+        },
+        sort: ['sort']
+      })
+    );
+    return values;
+  } catch (error) {
+    console.error('Error fetching core values:', error);
+    return [];
+  }
+}
+
+/**
+ * Get history timeline events for about page
+ * @returns {Promise<Array>} Array of history events
+ */
+export async function getHistoryTimeline() {
+  try {
+    const events = await directus.request(
+      readItems('history_timeline', {
+        fields: ['id', 'year', 'title', 'description', 'sort'],
+        filter: {
+          status: { _eq: 'published' }
+        },
+        sort: ['sort']
+      })
+    );
+    return events;
+  } catch (error) {
+    console.error('Error fetching history timeline:', error);
+    return [];
+  }
+}
+
+/**
+ * Get beliefs for statement of faith
+ * @returns {Promise<Array>} Array of beliefs
+ */
+export async function getBeliefs() {
+  try {
+    const beliefs = await directus.request(
+      readItems('beliefs', {
+        fields: ['id', 'title', 'content', 'sort'],
+        filter: {
+          status: { _eq: 'published' }
+        },
+        sort: ['sort']
+      })
+    );
+    return beliefs;
+  } catch (error) {
+    console.error('Error fetching beliefs:', error);
     return [];
   }
 }
