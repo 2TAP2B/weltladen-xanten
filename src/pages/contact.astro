@@ -102,7 +102,7 @@ import Button from "../components/UI/Button.astro";
           </form>
           
           <script is:inline>
-            // Handle form submission
+            // Handle form submission - submit directly to Directus
             document.getElementById('contact-form')?.addEventListener('submit', async function(e) {
               e.preventDefault();
               
@@ -125,12 +125,14 @@ import Button from "../components/UI/Button.astro";
                 const data = {
                   name: formData.get('name'),
                   email: formData.get('email'),
-                  phone: formData.get('phone'),
+                  phone: formData.get('phone') || null,
                   subject: formData.get('subject'),
-                  message: formData.get('message')
+                  message: formData.get('message'),
+                  status: 'new'
                 };
                 
-                const response = await fetch('/api/kontakt', {
+                // Submit directly to Directus API (public write access enabled)
+                const response = await fetch('https://ewgx.steltner.cc/items/kontakt', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json'
@@ -138,15 +140,9 @@ import Button from "../components/UI/Button.astro";
                   body: JSON.stringify(data)
                 });
                 
-                // Check if response is JSON
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                  throw new Error('Server returned non-JSON response. API endpoint may not be configured correctly.');
-                }
-                
                 const result = await response.json();
                 
-                if (result.success) {
+                if (response.ok && result.data) {
                   // Show success message
                   successMessage.classList.remove('hidden');
                   // Reset form
@@ -155,7 +151,8 @@ import Button from "../components/UI/Button.astro";
                   successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } else {
                   // Show error message
-                  errorText.textContent = result.message || 'Es ist ein Fehler aufgetreten.';
+                  const errorMsg = result.errors?.[0]?.message || 'Es ist ein Fehler aufgetreten.';
+                  errorText.textContent = errorMsg;
                   errorMessage.classList.remove('hidden');
                   errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
