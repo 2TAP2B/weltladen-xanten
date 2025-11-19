@@ -1,4 +1,4 @@
-import { createDirectus, rest, readItems, readSingleton } from '@directus/sdk';
+import { createDirectus, rest, readItems, readSingleton, createItem } from '@directus/sdk';
 
 /**
  * Directus Schema Type Definitions
@@ -131,6 +131,17 @@ type BlogPageHeader = {
   background_image: string | null;
 };
 
+type KontaktSubmission = {
+  id?: number;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  date_created?: string;
+  status?: string;
+};
+
 type Schema = {
   hero_slides: HeroSlide[];
   store_info: StoreInfo;
@@ -143,6 +154,7 @@ type Schema = {
   staff_page_header: StaffPageHeader;
   blog: BlogPost[];
   blog_page_header: BlogPageHeader;
+  kontakt: KontaktSubmission[];
 };
 
 /**
@@ -433,6 +445,30 @@ export async function getBlogPageHeader() {
   } catch (error) {
     console.error('Error fetching blog page header:', error);
     return null;
+  }
+}
+
+/**
+ * Submit a contact form
+ * @param data - Contact form data
+ * @returns {Promise<KontaktSubmission | null>} Created contact submission
+ */
+export async function submitKontaktForm(data: Omit<KontaktSubmission, 'id' | 'date_created' | 'status'>) {
+  try {
+    const submission = await directus.request(
+      createItem('kontakt', {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        subject: data.subject,
+        message: data.message,
+        status: 'new'
+      })
+    );
+    return submission;
+  } catch (error) {
+    console.error('Error submitting contact form:', error);
+    throw error;
   }
 }
 
