@@ -175,86 +175,161 @@ const tags = [...new Set(posts.flatMap(post => post.tags || []).filter(Boolean))
     </div>
   </section>
   
-  <script>
+  <script is:inline>
     // Filter functionality
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchInput = document.getElementById('search') as HTMLInputElement;
-      const authorInput = document.getElementById('author') as HTMLInputElement;
-      const tagCheckboxes = document.querySelectorAll('.tag-checkbox') as NodeListOf<HTMLInputElement>;
-      const fromDateInput = document.getElementById('from-date') as HTMLInputElement;
-      const toDateInput = document.getElementById('to-date') as HTMLInputElement;
-      const resetButton = document.getElementById('reset-filters') as HTMLButtonElement;
-      const postsGrid = document.getElementById('posts-grid') as HTMLElement;
-      const noResults = document.getElementById('no-results') as HTMLElement;
-      const blogCards = document.querySelectorAll('.blog-card') as NodeListOf<HTMLElement>;
+    document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('search');
+      const authorInput = document.getElementById('author');
+      const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
+      const fromDateInput = document.getElementById('from-date');
+      const toDateInput = document.getElementById('to-date');
+      const resetButton = document.getElementById('reset-filters');
+      const postsGrid = document.getElementById('posts-grid');
+      const noResults = document.getElementById('no-results');
+      const blogCards = document.querySelectorAll('.blog-card');
+      
+      console.log('Blog filter initialized');
+      console.log('Blog cards found:', blogCards.length);
+      
+      // Debug: log all cards data
+      blogCards.forEach(function(card, index) {
+        console.log('Card ' + index + ':', {
+          tags: card.getAttribute('data-tags'),
+          author: card.getAttribute('data-author'),
+          date: card.getAttribute('data-date')
+        });
+      });
       
       // Function to filter blog posts
-      const filterPosts = () => {
-        const searchTerm = searchInput?.value.toLowerCase() || '';
-        const authorTerm = authorInput?.value.toLowerCase() || '';
-        const fromDate = fromDateInput?.value || '';
-        const toDate = toDateInput?.value || '';
+      const filterPosts = function() {
+        const searchTerm = (searchInput && searchInput.value) ? searchInput.value.toLowerCase() : '';
+        const authorTerm = (authorInput && authorInput.value) ? authorInput.value.toLowerCase() : '';
+        const fromDate = (fromDateInput && fromDateInput.value) ? fromDateInput.value : '';
+        const toDate = (toDateInput && toDateInput.value) ? toDateInput.value : '';
         
-        // Get selected tags
-        const selectedTags = Array.from(tagCheckboxes)
-          .filter(checkbox => checkbox.checked)
-          .map(checkbox => checkbox.value);
+        // Get selected tags (normalize to lowercase and trim)
+        const selectedTags = [];
+        tagCheckboxes.forEach(function(checkbox) {
+          if (checkbox.checked) {
+            selectedTags.push(checkbox.value.toLowerCase().trim());
+          }
+        });
+        
+        console.log('Filtering with:', { 
+          searchTerm: searchTerm, 
+          authorTerm: authorTerm, 
+          fromDate: fromDate, 
+          toDate: toDate, 
+          selectedTags: selectedTags 
+        });
         
         let visibleCount = 0;
         
-        blogCards.forEach(card => {
-          const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
-          const description = card.querySelector('p')?.textContent?.toLowerCase() || '';
-          const author = card.getAttribute('data-author')?.toLowerCase() || '';
+        blogCards.forEach(function(card, index) {
+          // Get all text content from the card
+          const titleElement = card.querySelector('h3');
+          const title = titleElement ? titleElement.textContent.toLowerCase() : '';
+          
+          // Get excerpt paragraph (the one with excerpt content, not the "Mehr lesen" one)
+          const paragraphs = card.querySelectorAll('p');
+          let excerpt = '';
+          paragraphs.forEach(function(p) {
+            const text = p.textContent;
+            if (text && !text.includes('Mehr lesen') && !text.includes('min read')) {
+              excerpt = text.toLowerCase();
+            }
+          });
+          
+          const author = card.getAttribute('data-author') ? card.getAttribute('data-author').toLowerCase() : '';
           const date = card.getAttribute('data-date') || '';
-          const tags = (card.getAttribute('data-tags') || '').split(',').filter(t => t.trim());
+          const tagsAttr = card.getAttribute('data-tags') || '';
+          // Normalize tags to lowercase and trim
+          const tags = tagsAttr.split(',').map(function(t) { return t.trim().toLowerCase(); }).filter(function(t) { return t !== ''; });
+          
+          console.log('Card ' + index + ' data:', { title: title, author: author, date: date, tags: tags });
           
           // Check if post matches all filters
-          const matchesSearch = !searchTerm || title.includes(searchTerm) || description.includes(searchTerm);
+          const matchesSearch = !searchTerm || title.includes(searchTerm) || excerpt.includes(searchTerm);
           const matchesAuthor = !authorTerm || author.includes(authorTerm);
           const matchesFromDate = !fromDate || date >= fromDate;
           const matchesToDate = !toDate || date <= toDate;
           
           // Check if post has at least one of the selected tags (or if no tags are selected)
-          const matchesTags = selectedTags.length === 0 || 
-                             selectedTags.some(tag => tags.includes(tag));
+          let matchesTags = selectedTags.length === 0;
+          if (!matchesTags) {
+            for (let i = 0; i < selectedTags.length; i++) {
+              for (let j = 0; j < tags.length; j++) {
+                if (tags[j] === selectedTags[i]) {
+                  matchesTags = true;
+                  break;
+                }
+              }
+              if (matchesTags) break;
+            }
+          }
+          
+          console.log('Card ' + index + ' matches:', { 
+            search: matchesSearch, 
+            author: matchesAuthor, 
+            fromDate: matchesFromDate, 
+            toDate: matchesToDate, 
+            tags: matchesTags 
+          });
           
           // Show/hide the blog card
           if (matchesSearch && matchesAuthor && matchesFromDate && matchesToDate && matchesTags) {
-            card.style.display = 'block';
+            card.style.display = '';
             visibleCount++;
           } else {
             card.style.display = 'none';
           }
         });
         
+        console.log('Visible cards after filtering:', visibleCount);
+        
         // Show/hide no results message
         if (noResults) {
-          noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+          if (visibleCount === 0) {
+            noResults.style.display = 'block';
+            noResults.classList.remove('hidden');
+          } else {
+            noResults.style.display = 'none';
+            noResults.classList.add('hidden');
+          }
         }
       };
       
       // Add event listeners
-      searchInput?.addEventListener('input', filterPosts);
-      authorInput?.addEventListener('input', filterPosts);
-      tagCheckboxes.forEach(checkbox => {
+      if (searchInput) {
+        searchInput.addEventListener('input', filterPosts);
+      }
+      if (authorInput) {
+        authorInput.addEventListener('input', filterPosts);
+      }
+      tagCheckboxes.forEach(function(checkbox) {
         checkbox.addEventListener('change', filterPosts);
       });
-      fromDateInput?.addEventListener('change', filterPosts);
-      toDateInput?.addEventListener('change', filterPosts);
+      if (fromDateInput) {
+        fromDateInput.addEventListener('change', filterPosts);
+      }
+      if (toDateInput) {
+        toDateInput.addEventListener('change', filterPosts);
+      }
       
       // Reset filters
-      resetButton?.addEventListener('click', () => {
-        if (searchInput) searchInput.value = '';
-        if (authorInput) authorInput.value = '';
-        tagCheckboxes.forEach(checkbox => {
-          checkbox.checked = false;
+      if (resetButton) {
+        resetButton.addEventListener('click', function() {
+          if (searchInput) searchInput.value = '';
+          if (authorInput) authorInput.value = '';
+          tagCheckboxes.forEach(function(checkbox) {
+            checkbox.checked = false;
+          });
+          if (fromDateInput) fromDateInput.value = '';
+          if (toDateInput) toDateInput.value = '';
+          
+          filterPosts();
         });
-        if (fromDateInput) fromDateInput.value = '';
-        if (toDateInput) toDateInput.value = '';
-        
-        filterPosts();
-      });
+      }
     });
   </script>
 </BaseLayout>

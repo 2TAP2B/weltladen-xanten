@@ -8,9 +8,10 @@ export interface Props {
   href?: string;
   className?: string;
   imageLayout?: 'top' | 'background';
+  [key: string]: any; // Allow any additional props (like data-* attributes)
 }
 
-const { title, image, href, className = "", imageLayout = 'top' } = Astro.props;
+const { title, image, href, className = "", imageLayout = 'top', ...rest } = Astro.props;
 const Element = href ? "a" : "div";
 ---
 
@@ -22,6 +23,7 @@ const Element = href ? "a" : "div";
     { 'relative': imageLayout === 'background' },
     className
   ]}
+  {...rest}
 >
   {image && (
     <div class:list={[
