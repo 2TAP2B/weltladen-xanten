@@ -178,15 +178,15 @@ const tags = [...new Set(posts.flatMap(post => post.tags || []).filter(Boolean))
   <script>
     // Filter functionality
     document.addEventListener('DOMContentLoaded', () => {
-      const searchInput = document.getElementById('search');
-      const authorInput = document.getElementById('author');
-      const tagCheckboxes = document.querySelectorAll('.tag-checkbox');
-      const fromDateInput = document.getElementById('from-date');
-      const toDateInput = document.getElementById('to-date');
-      const resetButton = document.getElementById('reset-filters');
-      const postsGrid = document.getElementById('posts-grid');
-      const noResults = document.getElementById('no-results');
-      const blogCards = document.querySelectorAll('.blog-card');
+      const searchInput = document.getElementById('search') as HTMLInputElement;
+      const authorInput = document.getElementById('author') as HTMLInputElement;
+      const tagCheckboxes = document.querySelectorAll('.tag-checkbox') as NodeListOf<HTMLInputElement>;
+      const fromDateInput = document.getElementById('from-date') as HTMLInputElement;
+      const toDateInput = document.getElementById('to-date') as HTMLInputElement;
+      const resetButton = document.getElementById('reset-filters') as HTMLButtonElement;
+      const postsGrid = document.getElementById('posts-grid') as HTMLElement;
+      const noResults = document.getElementById('no-results') as HTMLElement;
+      const blogCards = document.querySelectorAll('.blog-card') as NodeListOf<HTMLElement>;
       
       // Function to filter blog posts
       const filterPosts = () => {
@@ -203,14 +203,14 @@ const tags = [...new Set(posts.flatMap(post => post.tags || []).filter(Boolean))
         let visibleCount = 0;
         
         blogCards.forEach(card => {
-          const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
-          const description = card.querySelector('p')?.textContent.toLowerCase() || '';
+          const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+          const description = card.querySelector('p')?.textContent?.toLowerCase() || '';
           const author = card.getAttribute('data-author')?.toLowerCase() || '';
           const date = card.getAttribute('data-date') || '';
-          const tags = (card.getAttribute('data-tags') || '').split(',');
+          const tags = (card.getAttribute('data-tags') || '').split(',').filter(t => t.trim());
           
           // Check if post matches all filters
-          const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+          const matchesSearch = !searchTerm || title.includes(searchTerm) || description.includes(searchTerm);
           const matchesAuthor = !authorTerm || author.includes(authorTerm);
           const matchesFromDate = !fromDate || date >= fromDate;
           const matchesToDate = !toDate || date <= toDate;
