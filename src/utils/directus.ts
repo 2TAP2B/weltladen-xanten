@@ -1,4 +1,4 @@
-import { createDirectus, rest, readItems, readSingleton, createItem, staticToken } from '@directus/sdk';
+import { createDirectus, rest, readItems, readSingleton, createItem } from '@directus/sdk';
 
 /**
  * Directus Schema Type Definitions
@@ -161,26 +161,6 @@ type Schema = {
  * Directus SDK Client
  */
 const directus = createDirectus<Schema>('https://ewgx.steltner.cc').with(rest());
-
-/**
- * Directus SDK Client with Authentication (for write operations)
- * This should be used for server-side operations that require authentication
- */
-const getAuthenticatedDirectus = () => {
-  // In Astro, we need to use import.meta.env for environment variables
-  // But since this might be called from different contexts, we check both
-  const token = typeof import.meta !== 'undefined' && import.meta.env 
-    ? import.meta.env.DIRECTUS_TOKEN 
-    : process.env.DIRECTUS_TOKEN;
-    
-  if (!token) {
-    console.error('DIRECTUS_TOKEN is not configured');
-    throw new Error('DIRECTUS_TOKEN is not configured. Please add DIRECTUS_TOKEN to your .env file.');
-  }
-  return createDirectus<Schema>('https://ewgx.steltner.cc')
-    .with(staticToken(token))
-    .with(rest());
-};
 
 /**
  * Get hero slides for homepage
@@ -472,11 +452,12 @@ export async function getBlogPageHeader() {
  * Submit a contact form
  * @param data - Contact form data
  * @returns {Promise<KontaktSubmission | null>} Created contact submission
+ * Note: This uses public access - ensure the kontakt collection allows public create permission
  */
 export async function submitKontaktForm(data: Omit<KontaktSubmission, 'id' | 'date_created' | 'status'>) {
   try {
-    const authenticatedDirectus = getAuthenticatedDirectus();
-    const submission = await authenticatedDirectus.request(
+    // Use the public directus client (no authentication needed)
+    const submission = await directus.request(
       createItem('kontakt', {
         name: data.name,
         email: data.email,
