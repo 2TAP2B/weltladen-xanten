@@ -63,10 +63,17 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (error) {
     console.error('Error processing contact form:', error);
     
+    // Log more details about the error
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    
     return new Response(
       JSON.stringify({
         success: false,
-        message: 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.'
+        message: 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.',
+        error: error instanceof Error ? error.message : 'Unknown error'
       }),
       {
         status: 500,
