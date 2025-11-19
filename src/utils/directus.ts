@@ -142,6 +142,23 @@ type KontaktSubmission = {
   status?: string;
 };
 
+type Event = {
+  id: number;
+  status: string;
+  title: string;
+  slug: string;
+  event_date: string;
+  end_date?: string | null;
+  time?: string | null;
+  location?: string | null;
+  featured_image?: string | null;
+  summary?: string | null;
+  description?: string | null;
+  tags?: string[] | null;
+  registration_required?: boolean;
+  registration_link?: string | null;
+};
+
 type Schema = {
   hero_slides: HeroSlide[];
   store_info: StoreInfo;
@@ -155,6 +172,7 @@ type Schema = {
   blog: BlogPost[];
   blog_page_header: BlogPageHeader;
   kontakt: KontaktSubmission[];
+  events: Event[];
 };
 
 /**
@@ -471,6 +489,81 @@ export async function submitKontaktForm(data: Omit<KontaktSubmission, 'id' | 'da
   } catch (error) {
     console.error('Error submitting contact form:', error);
     throw error;
+  }
+}
+
+/**
+ * Get all events
+ * @returns {Promise<Array>} Array of events
+ */
+export async function getEvents() {
+  try {
+    const events = await directus.request(
+      readItems('events', {
+        fields: [
+          'id',
+          'title',
+          'slug',
+          'event_date',
+          'end_date',
+          'time',
+          'location',
+          'featured_image',
+          'summary',
+          'description',
+          'tags',
+          'registration_required',
+          'registration_link',
+          'status'
+        ],
+        filter: {
+          status: { _eq: 'published' }
+        },
+        sort: ['event_date', 'title']
+      })
+    );
+    return events;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return [];
+  }
+}
+
+/**
+ * Get a single event by slug
+ * @param slug - Event slug
+ * @returns {Promise<Event | null>} Event
+ */
+export async function getEventBySlug(slug: string) {
+  try {
+    const events = await directus.request(
+      readItems('events', {
+        fields: [
+          'id',
+          'title',
+          'slug',
+          'event_date',
+          'end_date',
+          'time',
+          'location',
+          'featured_image',
+          'summary',
+          'description',
+          'tags',
+          'registration_required',
+          'registration_link'
+        ],
+        filter: {
+          slug: { _eq: slug },
+          status: { _eq: 'published' }
+        },
+        limit: 1
+      })
+    );
+    return events.length > 0 ? events[0] : null;
+  } catch (error) {
+    console.error('Error fetching event:', error);
+    return null;
   }
 }
 

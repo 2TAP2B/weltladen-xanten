@@ -3,15 +3,38 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import HeroSection from "../components/Sections/HeroSection.astro";
 import StoreInfo from "../components/Sections/StoreInfo.astro";
 import OrganizationList from "../components/Sections/OrganizationList.astro";
-import EventList from "../components/Sections/EventList.astro";
-import SermonList from "../components/Sections/SermonList.astro";
+import Card from "../components/UI/Card.astro";
 import Button from "../components/UI/Button.astro";
-import { getHeroSlides, getStoreInfo, getOrganizations } from "../utils/directus";
+import { getHeroSlides, getStoreInfo, getOrganizations, getEvents, getBlogPosts, getAssetUrl } from "../utils/directus";
 
 // Fetch data from Directus
 const heroSlides = await getHeroSlides();
 const storeInfo = await getStoreInfo();
 const organizations = await getOrganizations();
+
+// Get upcoming events (max 3)
+const allEvents = await getEvents();
+const now = new Date();
+const upcomingEvents = allEvents
+  .filter(event => {
+    const eventEnd = event.end_date || event.event_date;
+    return new Date(eventEnd) >= now;
+  })
+  .slice(0, 3);
+
+// Get latest blog posts (max 3)
+const allBlogPosts = await getBlogPosts();
+const latestBlogPosts = allBlogPosts.slice(0, 3);
+
+// Helper function to format date
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('de-DE', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+}
 ---
 
 <BaseLayout
@@ -34,17 +57,16 @@ const organizations = await getOrganizations();
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div>
           <img 
-            src="/uploads/church-default.webp" 
+            src="/eine-welt-gruppe2.webp" 
             alt="Our Church" 
             class="rounded-lg shadow-lg object-cover w-full h-full"
           />
         </div>
         
         <div>
-          <h2 class="text-3xl md:text-4xl font-bold mb-6">About Our Church</h2>
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">Alles über die EWGX</h2>
           <p class="text-gray-700 dark:text-gray-300 mb-6 text-lg">
-            We are a welcoming Christian community dedicated to sharing God's love through worship, fellowship, and service. Our church has been serving the community for over 50 years, providing a place for spiritual growth and connection.
-          </p>
+Lorem Ipsum dolor sit amet, consectetur adipiscing elit.          </p>
           <p class="text-gray-700 dark:text-gray-300 mb-8 text-lg">
             Whether you're exploring faith for the first time or looking for a church home, we invite you to join us. Our diverse congregation welcomes people of all ages, backgrounds, and walks of life.
           </p>
@@ -57,11 +79,123 @@ const organizations = await getOrganizations();
     </div>
   </section>
   
-  <!-- Events Section -->
-  <EventList />
+  <!-- Upcoming Events Section -->
+  <section class="py-16 dark:bg-gray-900">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 dark:text-white">Kommende Veranstaltungen</h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Entdecken Sie unsere nächsten Events rund um fairen Handel und Nachhaltigkeit
+        </p>
+      </div>
+      
+      {upcomingEvents.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {upcomingEvents.map((event) => (
+            <Card
+              title={event.title}
+              image={event.featured_image ? {
+                src: getAssetUrl(event.featured_image, { width: 800, height: 600, fit: 'cover', quality: 80 }),
+                alt: event.title
+              } : undefined}
+              href={`/events/${event.slug}`}
+              className="dark:bg-gray-800"
+            >
+              <div class="space-y-2 mb-4">
+                <div class="flex items-start text-gray-600 dark:text-gray-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span class="text-sm">{formatDate(event.event_date)}</span>
+                </div>
+                
+                {event.location && (
+                  <div class="flex items-start text-gray-600 dark:text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="text-sm">{event.location}</span>
+                  </div>
+                )}
+              </div>
+              
+              {event.summary && (
+                <p class="text-gray-700 dark:text-gray-300 text-sm line-clamp-3">
+                  {event.summary}
+                </p>
+              )}
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          <p class="text-gray-600 dark:text-gray-400">Derzeit sind keine kommenden Veranstaltungen geplant.</p>
+        </div>
+      )}
+      
+      {upcomingEvents.length > 0 && (
+        <div class="mt-12 text-center">
+          <Button href="/events" variant="primary">
+            Alle Veranstaltungen
+          </Button>
+        </div>
+      )}
+    </div>
+  </section>
   
-  <!-- Sermons Section -->
-  <SermonList />
+  <!-- Latest Blog Posts Section -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 dark:text-white">Aktuelles aus unserem Blog</h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Neuigkeiten, Geschichten und Informationen rund um fairen Handel
+        </p>
+      </div>
+      
+      {latestBlogPosts.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {latestBlogPosts.map((post) => (
+            <Card
+              title={post.title}
+              image={post.featured_image ? {
+                src: getAssetUrl(post.featured_image, { width: 800, height: 600, fit: 'cover', quality: 80 }),
+                alt: post.title
+              } : undefined}
+              href={`/blog/${post.slug}`}
+              className="dark:bg-gray-700"
+            >
+              <div class="mb-3 flex items-center text-gray-600 dark:text-gray-400 text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>{formatDate(post.published_date)}</span>
+              </div>
+              
+              {post.excerpt && (
+                <p class="text-gray-700 dark:text-gray-300 text-sm line-clamp-3">
+                  {post.excerpt}
+                </p>
+              )}
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div class="text-center py-12 bg-white dark:bg-gray-700 rounded-lg">
+          <p class="text-gray-600 dark:text-gray-400">Noch keine Blogbeiträge vorhanden.</p>
+        </div>
+      )}
+      
+      {latestBlogPosts.length > 0 && (
+        <div class="mt-12 text-center">
+          <Button href="/blog" variant="primary">
+            Alle Beiträge
+          </Button>
+        </div>
+      )}
+    </div>
+  </section>
   
   <!-- Ministries Preview -->
   <section class="py-16 bg-gray-50 dark:bg-gray-800">
