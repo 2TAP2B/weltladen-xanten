@@ -2,31 +2,25 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHeader from "../../components/Sections/PageHeader.astro";
 import Card from "../../components/UI/Card.astro";
-import { getCollection } from "astro:content";
+import { getBlogPosts, getBlogPageHeader, getAssetUrl } from "../../utils/directus";
 import { formatDate } from "../../utils/dateUtils";
 
-// Get all blog posts
-const allPosts = await getCollection("blog", ({ data }) => {
-  return import.meta.env.PROD ? !data.draft : true;
-});
-
-// Sort by date (newest first)
-const posts = allPosts.sort((a, b) => 
-  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
-);
+// Get blog posts from Directus
+const posts = await getBlogPosts();
+const blogHeader = await getBlogPageHeader();
 
 // Get unique tags for filters
-const tags = [...new Set(posts.flatMap(post => post.data.tags))];
+const tags = [...new Set(posts.flatMap(post => post.tags || []).filter(Boolean))];
 ---
 
 <BaseLayout
-  title="Blog - Church Name"
-  description="Read our latest articles, devotionals, and updates from our church community."
+  title="Blog - Eine Welt Gruppe Xanten"
+  description="Lesen Sie unsere neuesten Artikel, Berichte und Updates aus der Eine Welt Gruppe Xanten."
 >
   <PageHeader 
-    title="Blog" 
-    subtitle="Insights, devotionals, and updates from our church community"
-    backgroundImage="/uploads/blog-header-bg.webp"
+    title={blogHeader?.title || "Blog"} 
+    subtitle={blogHeader?.subtitle || "Neuigkeiten, Berichte und Updates"}
+    backgroundImage={blogHeader?.background_image ? getAssetUrl(blogHeader.background_image, { width: 1920, height: 600, fit: 'cover' }) : "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1920&h=600&fit=crop"}
   />
   
   <!-- Blog Posts List -->
@@ -35,17 +29,17 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))];
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <!-- Filters Sidebar -->
         <div class="lg:col-span-1">
-          <div class="bg-white p-6 rounded-lg shadow-sm sticky top-24">
-            <h2 class="text-xl font-bold mb-6">Filter Posts</h2>
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm sticky top-24">
+            <h2 class="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100">Filter</h2>
             
             <!-- Search -->
             <div class="mb-6">
-              <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+              <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Suche</label>
               <input 
                 type="text" 
                 id="search" 
-                placeholder="Search posts..." 
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                placeholder="Beiträge durchsuchen..." 
+                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
             
@@ -53,12 +47,12 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))];
             {
               tags.length > 0 && (
                 <div class="mb-6">
-                  <h3 class="block text-sm font-medium text-gray-700 mb-2">Tags</h3>
+                  <h3 class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Schlagwörter</h3>
                   <div class="space-y-2">
                     {tags.map(tag => (
                       <label class="flex items-center">
-                        <input type="checkbox" class="tag-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" value={tag} />
-                        <span class="ml-2 text-gray-700">{tag}</span>
+                        <input type="checkbox" class="tag-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 rounded" value={tag} />
+                        <span class="ml-2 text-gray-700 dark:text-gray-300">{tag}</span>
                       </label>
                     ))}
                   </div>
@@ -68,34 +62,34 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))];
             
             <!-- Author Filter -->
             <div class="mb-6">
-              <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+              <label for="author" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Autor</label>
               <input 
                 type="text" 
                 id="author" 
-                placeholder="Filter by author..." 
-                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                placeholder="Nach Autor filtern..." 
+                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
             
             <!-- Date Range Filter -->
             <div class="space-y-3">
-              <label class="block text-sm font-medium text-gray-700">Date Range</label>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Zeitraum</label>
               
               <div>
-                <label for="from-date" class="block text-xs text-gray-500 mb-1">From</label>
+                <label for="from-date" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Von</label>
                 <input 
                   type="date" 
                   id="from-date" 
-                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                  class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               
               <div>
-                <label for="to-date" class="block text-xs text-gray-500 mb-1">To</label>
+                <label for="to-date" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Bis</label>
                 <input 
                   type="date" 
                   id="to-date" 
-                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                  class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
             </div>
@@ -103,52 +97,61 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))];
             <!-- Reset Filters Button -->
             <button 
               id="reset-filters"
-              class="w-full mt-6 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              class="w-full mt-6 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
             >
-              Reset Filters
+              Filter zurücksetzen
             </button>
           </div>
         </div>
         
         <!-- Blog Posts Grid -->
         <div class="lg:col-span-3">
-          <h2 class="text-2xl font-bold mb-6">All Posts</h2>
+          <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Alle Beiträge</h2>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="posts-grid">
             {posts.map((post) => (
               <Card
-                title={post.data.title}
-                image={post.data.image && {
-                  src: post.data.image.url,
-                  alt: post.data.image.alt
-                }}
+                title={post.title}
+                image={post.featured_image ? {
+                  src: getAssetUrl(post.featured_image, { width: 800, height: 600, fit: 'cover' }),
+                  alt: post.title
+                } : undefined}
                 href={`/blog/${post.slug}`}
                 className="blog-card"
-                data-tags={post.data.tags.join(',')}
-                data-author={post.data.author}
-                data-date={post.data.pubDate.toISOString().slice(0, 10)}
+                data-tags={(post.tags || []).join(',')}
+                data-author={post.author}
+                data-date={post.published_date}
               >
-                <div class="mb-3 flex items-center text-gray-600">
+                <div class="mb-3 flex items-center text-gray-600 dark:text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  <span>{formatDate(post.data.pubDate)}</span>
+                  <span>{formatDate(new Date(post.published_date))}</span>
                 </div>
                 
-                <div class="mb-3 flex items-center text-gray-600">
+                <div class="mb-3 flex items-center text-gray-600 dark:text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
-                  <span>{post.data.author}</span>
+                  <span>{post.author}</span>
                 </div>
                 
-                <p class="text-gray-700 mb-4">{post.data.description}</p>
+                {post.reading_time && (
+                  <div class="mb-3 flex items-center text-gray-600 dark:text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{post.reading_time} min read</span>
+                  </div>
+                )}
+                
+                <p class="text-gray-700 dark:text-gray-300 mb-4">{post.excerpt}</p>
                 
                 {
-                  post.data.tags.length > 0 && (
+                  post.tags && post.tags.length > 0 && (
                     <div class="flex flex-wrap gap-2 mb-4">
-                      {post.data.tags.map((tag) => (
-                        <span class="px-2 py-1 text-xs font-medium text-primary-700 bg-primary-100 rounded-full">
+                      {post.tags.map((tag: string) => (
+                        <span class="px-2 py-1 text-xs font-medium text-primary-700 dark:text-primary-400 bg-primary-100 dark:bg-primary-900/30 rounded-full">
                           {tag}
                         </span>
                       ))}
@@ -156,16 +159,16 @@ const tags = [...new Set(posts.flatMap(post => post.data.tags))];
                   )
                 }
 
-                <p class="text-primary-600 font-medium group-hover:underline group-hover:text-primary-700">
-                  Read More →
+                <p class="text-primary-600 dark:text-primary-400 font-medium group-hover:underline group-hover:text-primary-700 dark:group-hover:text-primary-300">
+                  Mehr lesen →
                 </p>
               </Card>
             ))}
           </div>
           
           <!-- No Results Message (Hidden by default) -->
-          <div id="no-results" class="hidden text-center py-12 bg-gray-50 rounded-lg mt-8">
-            <p class="text-gray-600">No posts match your search criteria. Please try different filters.</p>
+          <div id="no-results" class="hidden text-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg mt-8">
+            <p class="text-gray-600 dark:text-gray-400">Keine Beiträge gefunden. Bitte versuchen Sie andere Filter.</p>
           </div>
         </div>
       </div>

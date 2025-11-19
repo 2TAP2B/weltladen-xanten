@@ -107,6 +107,30 @@ type StaffPageHeader = {
   background_image: string | null;
 };
 
+type BlogPost = {
+  id: number;
+  status: string;
+  sort: number | null;
+  date_created: string;
+  date_updated: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  featured_image: string | null;
+  author: string;
+  tags: string[] | null;
+  published_date: string;
+  reading_time: number | null;
+};
+
+type BlogPageHeader = {
+  id: number;
+  title: string;
+  subtitle: string;
+  background_image: string | null;
+};
+
 type Schema = {
   hero_slides: HeroSlide[];
   store_info: StoreInfo;
@@ -117,6 +141,8 @@ type Schema = {
   beliefs: Belief[];
   staff_members: StaffMember[];
   staff_page_header: StaffPageHeader;
+  blog: BlogPost[];
+  blog_page_header: BlogPageHeader;
 };
 
 /**
@@ -316,6 +342,96 @@ export async function getStaffPageHeader() {
     return header;
   } catch (error) {
     console.error('Error fetching staff page header:', error);
+    return null;
+  }
+}
+
+/**
+ * Get all blog posts
+ * @returns {Promise<Array>} Array of blog posts
+ */
+export async function getBlogPosts() {
+  try {
+    const posts = await directus.request(
+      readItems('blog', {
+        fields: [
+          'id',
+          'title',
+          'slug',
+          'excerpt',
+          'content',
+          'featured_image',
+          'author',
+          'tags',
+          'published_date',
+          'reading_time',
+          'status',
+          'sort'
+        ],
+        filter: {
+          status: { _eq: 'published' }
+        },
+        sort: ['-published_date', '-date_created']
+      })
+    );
+    return posts;
+  } catch (error) {
+    console.error('Error fetching blog posts:', error);
+    return [];
+  }
+}
+
+/**
+ * Get a single blog post by slug
+ * @param slug - Blog post slug
+ * @returns {Promise<BlogPost | null>} Blog post
+ */
+export async function getBlogPostBySlug(slug: string) {
+  try {
+    const posts = await directus.request(
+      readItems('blog', {
+        fields: [
+          'id',
+          'title',
+          'slug',
+          'excerpt',
+          'content',
+          'featured_image',
+          'author',
+          'tags',
+          'published_date',
+          'reading_time',
+          'date_created',
+          'date_updated'
+        ],
+        filter: {
+          slug: { _eq: slug },
+          status: { _eq: 'published' }
+        },
+        limit: 1
+      })
+    );
+    return posts.length > 0 ? posts[0] : null;
+  } catch (error) {
+    console.error('Error fetching blog post:', error);
+    return null;
+  }
+}
+
+/**
+ * Get blog page header content
+ * @returns {Promise<BlogPageHeader | null>} Blog page header content
+ */
+export async function getBlogPageHeader() {
+  try {
+    const header = await directus.request(
+      readSingleton('blog_page_header', {
+        fields: ['title', 'subtitle', 'background_image']
+      })
+    );
+    return header;
+  } catch (error) {
+    console.error('Error fetching blog page header:', error);
     return null;
   }
 }
