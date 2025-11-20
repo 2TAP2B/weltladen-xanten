@@ -578,6 +578,7 @@ export function getAssetUrl(fileId: string, options: {
   height?: number;
   fit?: string;
   quality?: number;
+  format?: 'webp' | 'jpg' | 'png' | 'auto';
 } = {}) {
   if (!fileId) return '';
   
@@ -587,6 +588,9 @@ export function getAssetUrl(fileId: string, options: {
   if (options.height) params.append('height', options.height.toString());
   if (options.fit) params.append('fit', options.fit);
   if (options.quality) params.append('quality', options.quality.toString());
+  // Use WebP by default for better compression
+  if (options.format) params.append('format', options.format);
+  else params.append('format', 'webp');
   
   const query = params.toString();
   return `https://ewgx.steltner.cc/assets/${fileId}${query ? '?' + query : ''}`;

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
+/* Fonts are now loaded in BaseLayout.astro with proper preconnect and deferred loading */
 
 @tailwind base;
 @tailwind components;
@@ -11,10 +11,14 @@
   
   body {
     @apply font-sans text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-900;
+    /* Ensure text is visible while fonts load */
+    font-display: swap;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif font-bold text-gray-900 dark:text-gray-100;
+    /* Ensure text is visible while fonts load */
+    font-display: swap;
   }
 
   h1 {
