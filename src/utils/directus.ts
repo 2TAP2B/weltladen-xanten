@@ -159,6 +159,17 @@ type Event = {
   registration_link?: string | null;
 };
 
+type CallToAction = {
+  id: number;
+  title: string;
+  subtitle?: string | null;
+  background_image?: string | null;
+  primary_button_text?: string | null;
+  primary_button_link?: string | null;
+  secondary_button_text?: string | null;
+  secondary_button_link?: string | null;
+};
+
 type Schema = {
   hero_slides: HeroSlide[];
   store_info: StoreInfo;
@@ -173,6 +184,7 @@ type Schema = {
   blog_page_header: BlogPageHeader;
   kontakt: KontaktSubmission[];
   events: Event[];
+  callToAction: CallToAction[];
 };
 
 /**
@@ -216,6 +228,25 @@ export async function getStoreInfo() {
     return storeInfo;
   } catch (error) {
     console.error('Error fetching store info:', error);
+    return null;
+  }
+}
+
+/**
+ * Get call-to-action section data
+ * @returns {Promise<CallToAction | null>} Call-to-action data
+ */
+export async function getCallToAction() {
+  try {
+    const cta = await directus.request(
+      readItems('callToAction', {
+        fields: ['*'],
+        limit: 1
+      })
+    );
+    return cta && cta.length > 0 ? cta[0] : null;
+  } catch (error) {
+    console.error('Error fetching call-to-action:', error);
     return null;
   }
 }

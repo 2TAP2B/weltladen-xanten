@@ -1,0 +1,82 @@
+---
+import WeltladenLayout from "../../layouts/WeltladenLayout.astro";
+import PageHeader from "../../components/Sections/PageHeader.astro";
+import Button from "../../components/UI/Button.astro";
+---
+
+<WeltladenLayout
+  title="Fairer Handel & Fairtrade - Weltladen Xanten"
+  description="Was ist fairer Handel? Erfahren Sie mehr über Fairtrade-Standards, Produzenten und die Prinzipien des fairen Handels."
+>
+  <PageHeader 
+    title="Fairer Handel & Fairtrade" 
+    subtitle="Für eine gerechtere Weltwirtschaft"
+  />
+
+  <section class="py-16 dark:bg-gray-900">
+    <div class="container">
+      <div class="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
+        <h2>Was ist Fairer Handel?</h2>
+        <p>
+          Fairer Handel ist eine Handelspartnerschaft, die auf Dialog, Transparenz und Respekt beruht und nach mehr Gerechtigkeit im internationalen Handel strebt. Durch bessere Handelsbedingungen und die Sicherung sozialer Rechte für benachteiligte Produzenten und Arbeiter – insbesondere in den Ländern des Südens – leistet der Faire Handel einen Beitrag zu nachhaltiger Entwicklung.
+        </p>
+
+        <h2>Die 10 Prinzipien des Fairen Handels</h2>
+        <ol>
+          <li><strong>Chancen für wirtschaftlich benachteiligte Produzenten</strong> - Der Faire Handel ist eine Strategie zur Armutsbekämpfung.</li>
+          <li><strong>Transparenz und Verantwortlichkeit</strong> - Faire Handelsorganisationen sind transparent in ihrer Arbeitsweise.</li>
+          <li><strong>Faire Handelspraktiken</strong> - Die Organisation handelt im besten Interesse der Produzenten.</li>
+          <li><strong>Faire Bezahlung</strong> - Ein fairer Preis deckt nicht nur die Produktionskosten, sondern ermöglicht auch eine sozial gerechte Produktion.</li>
+          <li><strong>Keine Kinderarbeit, keine Zwangsarbeit</strong> - Organisationen im Fairen Handel halten sich an die UN-Kinderrechtskonvention.</li>
+          <li><strong>Diskriminierungsverbot, Geschlechtergerechtigkeit und gewerkschaftliche Organisationsfreiheit</strong></li>
+          <li><strong>Gute Arbeitsbedingungen</strong> - Die Arbeitsbedingungen sind sicher und gesundheitsverträglich.</li>
+          <li><strong>Capacity Building</strong> - Der Faire Handel unterstützt die Produzenten bei der Weiterentwicklung.</li>
+          <li><strong>Förderung des Fairen Handels</strong> - Fair-Handels-Organisationen werben für den Fairen Handel.</li>
+          <li><strong>Umweltschutz</strong> - Der Faire Handel fördert umweltverträgliche Anbaumethoden.</li>
+        </ol>
+
+        <h2>Fairtrade-Siegel</h2>
+        <p>
+          Das Fairtrade-Siegel kennzeichnet Produkte, die nach den internationalen Fairtrade-Standards gehandelt wurden. Die Standards beinhalten soziale, ökologische und ökonomische Kriterien. TransFair e.V. vergibt das Siegel in Deutschland.
+        </p>
+
+        <h3>Vorteile für Produzenten:</h3>
+        <ul>
+          <li>Fairtrade-Mindestpreis als Sicherheitsnetz</li>
+          <li>Fairtrade-Prämie für Gemeinschaftsprojekte</li>
+          <li>Langfristige Handelsbeziehungen</li>
+          <li>Vorfinanzierung möglich</li>
+          <li>Verbot ausbeuterischer Kinderarbeit</li>
+          <li>Förderung von Bio-Anbau</li>
+        </ul>
+
+        <h2>Weltladen-Standards</h2>
+        <p>
+          Als Weltladen verpflichten wir uns zu besonderen Qualitätsstandards:
+        </p>
+        <ul>
+          <li>100% Fairer Handel bei allen Produkten (außer Zusatzsortiment wie regionale Produkte)</li>
+          <li>Bildungs- und Informationsarbeit zum Fairen Handel</li>
+          <li>Politische Kampagnenarbeit für gerechtere Welthandelsstrukturen</li>
+          <li>Transparenz über Lieferketten und Handelspartner</li>
+          <li>Ehrenamtliches Engagement als Basis</li>
+        </ul>
+
+        <div class="mt-12 p-6 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+          <h3 class="mt-0">Möchten Sie mehr erfahren?</h3>
+          <p class="mb-4">
+            Besuchen Sie uns im Weltladen oder kontaktieren Sie uns für Informationsmaterial und Workshops.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <Button href="/weltladen/kontakt" variant="primary">
+              Kontakt aufnehmen
+            </Button>
+            <Button href="/weltladen/bildung" variant="outline">
+              Bildungsangebote
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</WeltladenLayout>

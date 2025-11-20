@@ -1,14 +1,14 @@
 ---
-// Define the navigation items with grouped structure
+// Define the navigation items for Weltladen section
 const navItems = [
   { text: "Home", href: "/" },
   { text: "Weltladen", href: "/weltladen" },
   { 
-    text: "Über uns", 
-    href: "/ueber-uns",
+    text: "Fairer Handel", 
+    href: "/weltladen/fairer-handel",
     children: [
-      { text: "Über uns", href: "/ueber-uns" },
-      { text: "Mitarbeiter", href: "/mitarbeiter" },
+      { text: "Fairer Handel", href: "/weltladen/fairer-handel" },
+      { text: "Produkte", href: "/weltladen/produkte" },
     ]
   },
   { 
@@ -18,6 +18,15 @@ const navItems = [
       { text: "Veranstaltungen", href: "/events" },
       { text: "Presse", href: "/blog" },
       { text: "Archiv", href: "/archiv" },
+    ]
+  },
+  { 
+    text: "Engagement", 
+    href: "#",
+    children: [
+      { text: "Aktuelle Kampagnen", href: "/weltladen/kampagnen" },
+      { text: "Bildungsarbeit", href: "/weltladen/bildung" },
+      { text: "Mitarbeiten", href: "/weltladen/mitarbeiten" },
     ]
   },
   { 
@@ -195,7 +204,7 @@ const currentPath = Astro.url.pathname;
           } else {
             // Single item
             const isActive = currentPath === item.href || 
-                             (item.href !== "/" && currentPath.startsWith(item.href));
+                             (item.href !== "/" && item.href !== "#" && currentPath.startsWith(item.href));
             return (
               <a
                 href={item.href}

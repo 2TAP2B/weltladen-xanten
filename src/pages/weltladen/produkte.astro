@@ -1,0 +1,145 @@
+---
+import WeltladenLayout from "../../layouts/WeltladenLayout.astro";
+import PageHeader from "../../components/Sections/PageHeader.astro";
+import Button from "../../components/UI/Button.astro";
+---
+
+<WeltladenLayout
+  title="Produkte - Weltladen Xanten"
+  description="Entdecken Sie unsere vielfältige Auswahl an fair gehandelten Produkten: Lebensmittel, Kunsthandwerk, Textilien und mehr."
+>
+  <PageHeader 
+    title="Unsere Produkte" 
+    subtitle="Fair gehandelt und nachhaltig produziert"
+  />
+
+  <section class="py-16 dark:bg-gray-900">
+    <div class="container">
+      <div class="max-w-4xl mx-auto">
+        <div class="prose prose-lg dark:prose-invert mb-12">
+          <p class="lead">
+            In unserem Weltladen finden Sie eine große Auswahl an fair gehandelten Produkten aus aller Welt. Alle Artikel entsprechen den Standards des Fairen Handels und stammen von Produzenten, die faire Löhne erhalten und unter menschenwürdigen Bedingungen arbeiten.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <!-- Lebensmittel -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            <div class="mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-500 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 dark:text-white">Lebensmittel</h3>
+            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+              <li>• Kaffee & Espresso</li>
+              <li>• Tee (Schwarz-, Grün-, Kräuter-, Früchtetee)</li>
+              <li>• Schokolade & Süßwaren</li>
+              <li>• Honig & Aufstriche</li>
+              <li>• Gewürze & Kräuter</li>
+              <li>• Reis, Quinoa & Hülsenfrüchte</li>
+              <li>• Müsli & Cerealien</li>
+              <li>• Wein & Säfte</li>
+              <li>• Olivenöl & Essig</li>
+            </ul>
+          </div>
+
+          <!-- Kunsthandwerk -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            <div class="mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-500 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 dark:text-white">Kunsthandwerk</h3>
+            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+              <li>• Schmuck aus verschiedenen Ländern</li>
+              <li>• Keramik & Töpferwaren</li>
+              <li>• Körbe & gewebte Artikel</li>
+              <li>• Holzschnitzereien</li>
+              <li>• Dekorationsartikel</li>
+              <li>• Papeterie & Grußkarten</li>
+              <li>• Musikinstrumente</li>
+              <li>• Spielzeug aus Holz</li>
+            </ul>
+          </div>
+
+          <!-- Textilien -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            <div class="mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-500 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 dark:text-white">Textilien & Mode</h3>
+            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+              <li>• T-Shirts aus Bio-Baumwolle</li>
+              <li>• Schals & Tücher</li>
+              <li>• Taschen & Rucksäcke</li>
+              <li>• Socken</li>
+              <li>• Accessoires</li>
+              <li>• Baby- & Kinderbekleidung</li>
+            </ul>
+          </div>
+
+          <!-- Kosmetik & Haushalt -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            <div class="mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-500 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 dark:text-white">Kosmetik & Haushalt</h3>
+            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+              <li>• Naturkosmetik</li>
+              <li>• Seifen & Pflegeprodukte</li>
+              <li>• Kerzen</li>
+              <li>• Räucherstäbchen</li>
+              <li>• Geschirrtücher</li>
+              <li>• Küchenutensilien</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="prose prose-lg dark:prose-invert">
+          <h2>Warum fair gehandelte Produkte kaufen?</h2>
+          <p>
+            Mit jedem Einkauf bei uns unterstützen Sie:
+          </p>
+          <ul>
+            <li><strong>Faire Bezahlung</strong> - Produzenten erhalten einen gerechten Preis für ihre Arbeit</li>
+            <li><strong>Bessere Lebensbedingungen</strong> - Durch die Fairtrade-Prämie werden Gemeinschaftsprojekte finanziert</li>
+            <li><strong>Umweltschutz</strong> - Viele Produkte sind bio-zertifiziert und werden nachhaltig angebaut</li>
+            <li><strong>Keine Kinderarbeit</strong> - Strikte Standards verbieten ausbeuterische Kinderarbeit</li>
+            <li><strong>Langfristige Perspektiven</strong> - Stabile Handelsbeziehungen ermöglichen Planungssicherheit</li>
+          </ul>
+
+          <h2>Herkunftsländer</h2>
+          <p>
+            Unsere Produkte stammen von Handelspartnern aus über 60 Ländern weltweit, darunter:
+          </p>
+          <p>
+            <strong>Lateinamerika:</strong> Peru, Bolivien, Ecuador, Mexiko, Costa Rica, El Salvador<br>
+            <strong>Afrika:</strong> Tansania, Uganda, Kenia, Südafrika, Ghana, Burkina Faso<br>
+            <strong>Asien:</strong> Indien, Sri Lanka, Nepal, Philippinen, Thailand, Vietnam, Indonesien
+          </p>
+        </div>
+
+        <div class="mt-12 p-8 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-center">
+          <h3 class="text-2xl font-bold mb-4 dark:text-white">Besuchen Sie uns im Laden!</h3>
+          <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
+            Erleben Sie die Vielfalt unserer Produkte vor Ort. Wir beraten Sie gerne!
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button href="/weltladen/kontakt" variant="primary" size="lg">
+              Öffnungszeiten & Anfahrt
+            </Button>
+            <Button href="/weltladen" variant="outline" size="lg">
+              Zurück zur Übersicht
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</WeltladenLayout>
